@@ -7,13 +7,13 @@ module.exports.register = async (req, res) => {
 
   try {
     const checkUser = await User.findOne({
-      email: email,
+      $or: [{ email: email }, { userName: userName }],
     });
 
     if (checkUser) {
       return res.json({
         success: false,
-        message: "User Already exists with the same email! Please try again",
+        message: "User Already exists with the same email or username! Please try again",
       });
     }
 
@@ -77,8 +77,8 @@ module.exports.login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Login Successfuly!",
-      token: token
-    })
+      token: token,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
