@@ -1,6 +1,9 @@
 const User = require("../../models/Users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const { sendMail } = require("../../helper/sendMail");
+const ForgotPassword = require("../../models/ForgotPassword");
 
 module.exports.register = async (req, res) => {
   const { userName, email, password } = req.body;
@@ -89,7 +92,7 @@ module.exports.login = async (req, res) => {
   }
 };
 
-module.exports.resetPassword = async (req, res) => {
+module.exports.changePassword = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -101,7 +104,7 @@ module.exports.resetPassword = async (req, res) => {
       });
     }
 
-    const isPasswordSame = await bcrypt.compare(password, checkUser.password)
+    const isPasswordSame = await bcrypt.compare(password, checkUser.password);
     if (isPasswordSame) {
       return res.status(404).json({
         success: false,
@@ -109,11 +112,89 @@ module.exports.resetPassword = async (req, res) => {
       });
     }
 
-    const hashPassword = await bcrypt.hash(password, 12)
+    const hashPassword = await bcrypt.hash(password, 12);
     await User.updateOne({ password: hashPassword });
     res.status(200).json({
       success: true,
       message: "Change password successfuly!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured",
+    });
+  }
+};
+
+module.exports.fotgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const checkUser = await User.findOne({ email: email });
+    if (!checkUser) {
+      return res.json({
+        success: false,
+        message: "User doesn't exists! Please enter again.",
+      });
+    }
+    const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const subject = "Mã OTP xác minh lấy lại mật khẩu";
+    const text = `
+    Mã OTP xác minh lấy lại mật khẩu là ${checkUser.resetToken}. Thời hạn sử dụng là 3 phút. Lưu ý không để lộ thông tin OTP!
+  `;
+    sendMail(checkUser.email, subject, text);
+
+    const userForgotPassword = {
+      email: checkUser.email,
+      otp: resetToken,
+      expireAt: new Date(Date.now() + 180 * 1000),
+    };
+
+    const forgotPassword = new ForgotPassword(userForgotPassword);
+    await forgotPassword.save();
+    res.status(200).json({
+      success: true,
+      message: "An email has been sent with password reset instructions.",
+      data: forgotPassword,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured",
+    });
+  }
+};
+
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const { otp, password } = req.body;
+
+    const checkUserForgotPassword = await ForgotPassword.findOne({
+      otp: otp,
+      expireAt: { $gt: Date.now() },
+    });
+
+    if (!checkUserForgotPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Password reset token invalid or has expired.",
+      });
+    }
+
+    const hashPassword = await bcrypt.hash(password, 12);
+    const userResetPassword = await User.findOneAndUpdate(
+      {
+        email: checkUserForgotPassword.email,
+      },
+      { password: hashPassword },
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      message: "Reset password successfuly.",
+      data: userResetPassword,
     });
   } catch (error) {
     console.log(error);

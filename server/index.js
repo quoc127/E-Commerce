@@ -1,5 +1,5 @@
-require("dotenv").config()
-const express = require("express")
+require("dotenv").config();
+const express = require("express");
 
 const app = express();
 
@@ -11,15 +11,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Databasse
-const dbConnect = require("./config/DBconnect")
-dbConnect.dbConnect();
+const { dbConnect } = require("./config/DBconnect");
+dbConnect();
 
 // Routes
-const RoutesAPIVer1 = require("./routes/index-routes")
-RoutesAPIVer1(app)
+const RoutesAPIVer1 = require("./routes/index-routes");
+RoutesAPIVer1(app);
 
 // Start server
-const PORT = process.env.PORT
-app.listen((PORT), () => {
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
   console.log(`Server is running at port ${PORT}`);
-})
+});
