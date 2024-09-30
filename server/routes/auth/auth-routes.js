@@ -6,5 +6,6 @@ const validate = require("../../validates/auth/auth-validates");
 
 route.post("/register", validate.RegisterValidate, controller.register);
 route.post("/login", controller.login);
+route.patch("/change-password", validate.ChangePasswordValidate, controller.resetPassword);
 
 module.exports = route;

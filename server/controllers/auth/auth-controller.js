@@ -13,7 +13,8 @@ module.exports.register = async (req, res) => {
     if (checkUser) {
       return res.json({
         success: false,
-        message: "User Already exists with the same email or username! Please try again",
+        message:
+          "User Already exists with the same email or username! Please try again",
       });
     }
 
@@ -78,6 +79,41 @@ module.exports.login = async (req, res) => {
       success: true,
       message: "Login Successfuly!",
       token: token,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured",
+    });
+  }
+};
+
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const checkUser = await User.findOne({ email: email });
+    if (!checkUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User doesn't exists! Please enter again.",
+      });
+    }
+
+    const isPasswordSame = await bcrypt.compare(password, checkUser.password)
+    if (isPasswordSame) {
+      return res.status(404).json({
+        success: false,
+        message: "The new password cannot be the same as the old password.",
+      });
+    }
+
+    const hashPassword = await bcrypt.hash(password, 12)
+    await User.updateOne({ password: hashPassword });
+    res.status(200).json({
+      success: true,
+      message: "Change password successfuly!",
     });
   } catch (error) {
     console.log(error);
