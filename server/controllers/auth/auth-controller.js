@@ -69,6 +69,7 @@ module.exports.login = async (req, res) => {
 
     const token = jwt.sign(
       {
+        id: checkUser._id,
         userName: checkUser.userName,
         email: checkUser.email,
         role: checkUser.role,
@@ -78,10 +79,9 @@ module.exports.login = async (req, res) => {
         expiresIn: "60m",
       }
     );
-    res.status(200).json({
+    res.cookie("token", token, { httpOnly: true, secure: false }).status(200).json({
       success: true,
       message: "Login Successfuly!",
-      token: token,
     });
   } catch (error) {
     console.log(error);
@@ -91,6 +91,22 @@ module.exports.login = async (req, res) => {
     });
   }
 };
+
+module.exports.logout = async (req, res) => {
+  try {
+    res.clearCookie("token").status(200).json({
+      success: true,
+      message: "Logout successfuly."
+    })
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured",
+    });
+  }
+}
 
 module.exports.changePassword = async (req, res) => {
   try {
