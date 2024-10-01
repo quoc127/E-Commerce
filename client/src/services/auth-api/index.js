@@ -12,16 +12,5 @@ export const postAuthRegister = (userName, email, password) => {
       {
         withCredentials: true,
       }
-    )
-    .then((response) => {
-      console.log("API Response:", response.data); // Debug API response
-      return response;
-    })
-    .catch((error) => {
-      console.log(
-        "API Error:",
-        error.response ? error.response.data : error.message
-      ); // Debug error from API
-      throw error; // Re-throw the error to be handled by createAsyncThunk
-    });
+    );
 };
