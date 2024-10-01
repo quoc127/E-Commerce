@@ -1,4 +1,8 @@
-import { postAuthLogin, postAuthRegister } from "@/services/auth-api";
+import {
+  getCheckAuth,
+  postAuthLogin,
+  postAuthRegister,
+} from "@/services/auth-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -8,7 +12,7 @@ const initialState = {
 };
 
 export const registerUser = createAsyncThunk(
-  "/auth/register",
+  "/user/register",
   async ({ userName, email, password }) => {
     const response = await postAuthRegister(userName, email, password);
     return response.data;
@@ -16,12 +20,17 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-  "/auth/login",
+  "/user/login",
   async ({ email, password }) => {
     const response = await postAuthLogin(email, password);
     return response.data;
   }
 );
+
+export const checkAuth = createAsyncThunk("/user/checkauth", async () => {
+  const response = await getCheckAuth();
+  return response.data;
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -53,6 +62,19 @@ const authSlice = createSlice({
         state.isAuthenticated = action.payload.success;
       })
       .addCase(loginUser.rejected, (state) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(checkAuth.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.success ? action.payload.user : null;
+        state.isAuthenticated = action.payload.success;
+      })
+      .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
