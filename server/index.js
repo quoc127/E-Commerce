@@ -1,7 +1,23 @@
 require("dotenv").config();
 const express = require("express");
-
+const cors = require("cors");
 const app = express();
+
+// CORS
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    allowedHeaders: [
+      "Content-type",
+      "Authorization",
+      "Cache-Control",
+      "Expires",
+      "Pragma",
+    ],
+    credentials: true,
+  })
+);
 
 const bodyParser = require("body-parser");
 // Support parsing of application/json type post data
