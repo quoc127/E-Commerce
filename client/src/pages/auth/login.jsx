@@ -10,6 +10,8 @@ const initialState = {
 
 export const AuthLogin = () => {
   const [formData, setFormData] = useState(initialState)
+  console.log("formData",formData);
+  
 
   const onSubmit = () =>{}
 

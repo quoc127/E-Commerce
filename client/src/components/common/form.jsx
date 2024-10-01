@@ -17,7 +17,6 @@ export const CommonForm = ({
   onSubmit,
   isBtnDisabled,
 }) => {
-  console.log("formControls", formControls);
 
   const renderInputsByComponentType = (getControlItem) => {
     let element = null;
