@@ -79,10 +79,13 @@ module.exports.login = async (req, res) => {
         expiresIn: "60m",
       }
     );
-    res.cookie("token", token, { httpOnly: true, secure: false }).status(200).json({
-      success: true,
-      message: "Login Successfuly!",
-    });
+    res
+      .cookie("token", token, { httpOnly: true, secure: false })
+      .status(200)
+      .json({
+        success: true,
+        message: "Login Successfuly!",
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -96,9 +99,8 @@ module.exports.logout = async (req, res) => {
   try {
     res.clearCookie("token").status(200).json({
       success: true,
-      message: "Logout successfuly."
-    })
-    
+      message: "Logout successfuly.",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -106,7 +108,7 @@ module.exports.logout = async (req, res) => {
       message: "Some error occured",
     });
   }
-}
+};
 
 module.exports.changePassword = async (req, res) => {
   try {
@@ -219,4 +221,13 @@ module.exports.resetPassword = async (req, res) => {
       message: "Some error occured",
     });
   }
+};
+
+module.exports.authMiddleware = async (req, res) => {
+  const user = req.user;
+  res.status(200).json({
+    success: true,
+    message: "Authenticated user",
+    user: user,
+  });
 };

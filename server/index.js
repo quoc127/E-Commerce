@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser")
 const app = express();
 
 // CORS
@@ -18,6 +19,9 @@ app.use(
     credentials: true,
   })
 );
+
+// Cookie
+app.use(cookieParser())
 
 const bodyParser = require("body-parser");
 // Support parsing of application/json type post data
