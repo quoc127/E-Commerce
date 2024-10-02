@@ -38,3 +38,20 @@ export const loginFormControls = [
     type: "password",
   },
 ];
+
+export const changPasswordFormControls = [
+  {
+    name: "email",
+    label: "Email",
+    placeholder: "Enter your email",
+    componentType: "input",
+    type: "email",
+  },
+  {
+    name: "password",
+    label: "Password",
+    placeholder: "Enter your password",
+    componentType: "input",
+    type: "password",
+  },
+];

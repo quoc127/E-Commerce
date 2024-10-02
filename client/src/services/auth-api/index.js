@@ -35,3 +35,16 @@ export const getCheckAuth = () => {
     },
   });
 };
+
+export const patchChangePassword = (email, password) => {
+  return axios.patch(
+    "http://localhost:5000/api/user/change-password",
+    {
+      email: email,
+      password: password,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+};

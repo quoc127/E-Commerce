@@ -13,6 +13,7 @@ import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "./components/ui/skeleton";
 import { UnauthPage } from "./pages/unauth-page";
 import { NotFound } from "./pages/not-found";
+import { AuthChangePassword } from "./pages/auth/change-password";
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
@@ -39,6 +40,12 @@ function App() {
             ></CheckAuth>
           }
         ></Route>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route
+            path="change-password"
+            element={<AuthChangePassword />}
+          ></Route>
+        </Route>
         <Route
           path="/auth"
           element={

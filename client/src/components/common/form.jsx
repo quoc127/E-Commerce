@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@radix-ui/react-select";
 import { Textarea } from "../ui/textarea";
+import { Link } from "react-router-dom";
 
 export const CommonForm = ({
   formControls,
@@ -17,7 +18,6 @@ export const CommonForm = ({
   onSubmit,
   isBtnDisabled,
 }) => {
-
   const renderInputsByComponentType = (getControlItem) => {
     let element = null;
     const value = formData[getControlItem.name] || "";
@@ -109,13 +109,21 @@ export const CommonForm = ({
     <form onSubmit={onSubmit}>
       <div className="flex flex-col gap-3">
         {formControls.map((controlItem, index) => {
-          return(
+          return (
             <div key={index} className="grid w-full gap-1.5">
-             <Label className="mb-1">{controlItem.label}</Label>
-             {renderInputsByComponentType(controlItem)}
+              <Label className="mb-1">{controlItem.label}</Label>
+              {renderInputsByComponentType(controlItem)}
             </div>
-          )
+          );
         })}
+      </div>
+      <div className="mt-2">
+        <Link
+          className=" hover:underline hover:text-blue-300"
+          to="/auth/change-password"
+        >
+          Change Password
+        </Link>
       </div>
       <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
         {buttonText || "Submit"}

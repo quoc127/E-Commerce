@@ -1,5 +1,6 @@
 import {
   getCheckAuth,
+  patchChangePassword,
   postAuthLogin,
   postAuthRegister,
 } from "@/services/auth-api";
@@ -32,6 +33,18 @@ export const checkAuth = createAsyncThunk("/user/checkauth", async () => {
   return response.data;
 });
 
+export const changePasswordUser = createAsyncThunk(
+  "/user/change-password",
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await patchChangePassword(email, password);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -46,7 +59,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = null;
-        state.isAuthenticated = true;
+        state.isAuthenticated = false;
       })
       .addCase(registerUser.rejected, (state) => {
         state.isLoading = false;
@@ -75,6 +88,19 @@ const authSlice = createSlice({
         state.isAuthenticated = action.payload.success;
       })
       .addCase(checkAuth.rejected, (state) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(changePasswordUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changePasswordUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(changePasswordUser.rejected, (state) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
