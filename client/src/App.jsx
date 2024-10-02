@@ -1,4 +1,10 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { AuthLogin } from "./pages/auth/login";
 import { AuthRegister } from "./pages/auth/register";
 import { AuthLayout } from "./components/auth/layout";
@@ -17,11 +23,24 @@ import { AuthChangePassword } from "./pages/auth/change-password";
 import { AuthForgotPassword } from "./pages/auth/forgot-password";
 import { AuthResetPassword } from "./pages/auth/reset-password";
 function App() {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
   );
-
-  const dispatch = useDispatch();
+  
+  if (
+    isAuthenticated &&
+    (location.pathname.includes("/change-password") ||
+      location.pathname.includes("/forgot-password"))
+  ) {
+    if (user?.role === "admin") {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/shop/home");
+    }
+  }
 
   useEffect(() => {
     dispatch(checkAuth());
