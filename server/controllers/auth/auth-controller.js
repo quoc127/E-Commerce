@@ -85,6 +85,12 @@ module.exports.login = async (req, res) => {
       .json({
         success: true,
         message: "Login Successfuly!",
+        user: {
+          id: checkUser._id,
+          userName: checkUser.userName,
+          email: checkUser.email,
+          role: checkUser.role,
+        },
       });
   } catch (error) {
     console.log(error);
