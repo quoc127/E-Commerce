@@ -124,14 +124,14 @@ module.exports.changePassword = async (req, res) => {
 
     const isPasswordSame = await bcrypt.compare(password, checkUser.password);
     if (isPasswordSame) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "The new password cannot be the same as the old password.",
       });
     }
 
     const hashPassword = await bcrypt.hash(password, 12);
-    await User.updateOne({ password: hashPassword });
+    await User.updateOne({ email: email }, { password: hashPassword });
     res.status(200).json({
       success: true,
       message: "Change password successfuly!",
