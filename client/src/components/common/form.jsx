@@ -117,13 +117,23 @@ export const CommonForm = ({
           );
         })}
       </div>
-      <div className="mt-2">
-        <Link
-          className=" hover:underline hover:text-blue-300"
-          to="/auth/change-password"
-        >
-          Change Password
-        </Link>
+      <div className="mt-2 flex justify-between">
+        <span>
+          <Link
+            className=" hover:underline hover:text-blue-300"
+            to="/auth/change-password"
+          >
+            Change Password
+          </Link>
+        </span>
+        <span>
+          <Link
+            className=" hover:underline hover:text-blue-300"
+            to="/auth/forgot-password"
+          >
+            Forgot Password
+          </Link>
+        </span>
       </div>
       <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
         {buttonText || "Submit"}

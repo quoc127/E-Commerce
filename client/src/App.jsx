@@ -14,6 +14,8 @@ import { Skeleton } from "./components/ui/skeleton";
 import { UnauthPage } from "./pages/unauth-page";
 import { NotFound } from "./pages/not-found";
 import { AuthChangePassword } from "./pages/auth/change-password";
+import { AuthForgotPassword } from "./pages/auth/forgot-password";
+import { AuthResetPassword } from "./pages/auth/reset-password";
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
@@ -45,6 +47,11 @@ function App() {
             path="change-password"
             element={<AuthChangePassword />}
           ></Route>
+          <Route
+            path="forgot-password"
+            element={<AuthForgotPassword />}
+          ></Route>
+          <Route path="reset-password" element={<AuthResetPassword />}></Route>
         </Route>
         <Route
           path="/auth"

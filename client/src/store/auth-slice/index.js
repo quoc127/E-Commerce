@@ -1,8 +1,10 @@
 import {
   getCheckAuth,
   patchChangePassword,
+  patchResetPassword,
   postAuthLogin,
   postAuthRegister,
+  postForgotPassword,
 } from "@/services/auth-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -38,6 +40,30 @@ export const changePasswordUser = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await patchChangePassword(email, password);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const forgotPasswordUser = createAsyncThunk(
+  "/user/forgot-password",
+  async ({ email }, { rejectWithValue }) => {
+    try {
+      const response = await postForgotPassword(email);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const resetPasswordUser = createAsyncThunk(
+  "/user/reset-password",
+  async ({ otp, password }, { rejectWithValue }) => {
+    try {
+      const response = await patchResetPassword(otp, password);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

@@ -48,3 +48,28 @@ export const patchChangePassword = (email, password) => {
     }
   );
 };
+
+export const postForgotPassword = (email) => {
+  return axios.post(
+    "http://localhost:5000/api/user/forgot-password",
+    {
+      email: email,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+};
+
+export const patchResetPassword = (otp, password) => {
+  return axios.patch(
+    "http://localhost:5000/api/user/reset-password",
+    {
+      otp: otp,
+      password: password,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+};

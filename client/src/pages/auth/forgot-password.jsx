@@ -1,17 +1,16 @@
 import { CommonForm } from "@/components/common/form";
-import { changPasswordFormControls } from "@/config";
+import { forgotPasswordFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
-import { changePasswordUser } from "@/store/auth-slice";
+import { forgotPasswordUser } from "@/store/auth-slice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const initialState = {
   email: "",
-  password: "",
 };
 
-export const AuthChangePassword = () => {
+export const AuthForgotPassword = () => {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -19,12 +18,12 @@ export const AuthChangePassword = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(changePasswordUser(formData)).then((data) => {
+    dispatch(forgotPasswordUser(formData)).then((data) => {
       if (data?.payload?.success) {
         toast({
           title: data?.payload?.message,
         });
-        navigate("/auth/login");
+        navigate("/auth/reset-password");
       } else {
         toast({
           title: data?.payload?.message,
@@ -37,7 +36,7 @@ export const AuthChangePassword = () => {
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Change password your account
+          Enter your email
         </h1>
         <p className="mt-2">
           Don't have an account
@@ -50,8 +49,8 @@ export const AuthChangePassword = () => {
         </p>
       </div>
       <CommonForm
-        formControls={changPasswordFormControls}
-        buttonText={"Change Password"}
+        formControls={forgotPasswordFormControls}
+        buttonText={"Send"}
         formData={formData}
         setFormData={setFormData}
         onSubmit={onSubmit}
