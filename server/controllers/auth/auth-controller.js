@@ -150,7 +150,7 @@ module.exports.fotgotPassword = async (req, res) => {
     const { email } = req.body;
     const checkUser = await User.findOne({ email: email });
     if (!checkUser) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: "User doesn't exists! Please enter again.",
       });
@@ -159,7 +159,7 @@ module.exports.fotgotPassword = async (req, res) => {
 
     const subject = "Mã OTP xác minh lấy lại mật khẩu";
     const text = `
-    Mã OTP xác minh lấy lại mật khẩu là ${checkUser.resetToken}. Thời hạn sử dụng là 3 phút. Lưu ý không để lộ thông tin OTP!
+    Mã OTP xác minh lấy lại mật khẩu là ${resetToken}. Thời hạn sử dụng là 3 phút. Lưu ý không để lộ thông tin OTP!
   `;
     sendMail(checkUser.email, subject, text);
 
