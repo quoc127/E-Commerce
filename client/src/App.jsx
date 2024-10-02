@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthLogin } from "./pages/auth/login";
 import { AuthRegister } from "./pages/auth/register";
 import { AuthLayout } from "./components/auth/layout";
@@ -56,11 +56,12 @@ function App() {
         <Route
           path="/auth"
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={useDispatch}>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <AuthLayout />
             </CheckAuth>
           }
         >
+          <Route index element={<Navigate to="/auth/login" />}></Route>
           <Route path="login" element={<AuthLogin />}></Route>
           <Route path="register" element={<AuthRegister />}></Route>
         </Route>
@@ -72,6 +73,7 @@ function App() {
             </CheckAuth>
           }
         >
+          <Route index element={<Navigate to="/admin/dashboard" />}></Route>
           <Route path="dashboard" element={<AdminDashboard />}></Route>
         </Route>
         <Route
@@ -82,6 +84,7 @@ function App() {
             </CheckAuth>
           }
         >
+          <Route index element={<Navigate to="/shop/home" />}></Route>
           <Route path="home" element={<ShoppingHome />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
