@@ -4,10 +4,12 @@ const route = express.Router();
 const controller = require("../../../controllers/admin/product/product-controller");
 const { upload } = require("../../../helper/upload-cloudinary");
 const uploadCloudMiddleware = require("../../../middleware/uploadCloude-middleware");
+const validate = require("../../../validates/admin/product/product-validates") 
 
 route.post(
   "/add-product",
   upload().single("image"),
+  validate.AddProduct,
   uploadCloudMiddleware.handleImageUpload,
   controller.addProduct
 );
