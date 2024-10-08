@@ -1,5 +1,5 @@
 const authRoutes = require("../routes/auth/auth-routes");
-const brandRoutes = require("../routes/brand/brand-routes");
+const brandRoutes = require("../routes/admin/brand/brand-routes");
 
 module.exports = (app) => {
   // Auth User

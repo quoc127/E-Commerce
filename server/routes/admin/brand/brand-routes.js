@@ -1,8 +1,8 @@
 const express = require("express");
 const route = express.Router();
 
-const controller = require("../../controllers/brand/brand-controller");
-const validate = require("../../validates/brand/brand-validates");
+const controller = require("../../..//controllers/admin/brand/brand-controller");
+const validate = require("../../../validates/admin/brand/brand-validates");
 
 route.post("/add-brand", validate.BrandValidate, controller.addBrand);
 
