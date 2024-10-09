@@ -27,6 +27,15 @@ export const postAuthLogin = (email, password) => {
   );
 };
 
+export const postAuthLogout = () => {
+  return axios.post(
+    "http://localhost:5000/api/user/logout",
+    {
+      withCredentials: true,
+    }
+  );
+};
+
 export const getCheckAuth = () => {
   return axios.get("http://localhost:5000/api/user/check-auth", {
     withCredentials: true,

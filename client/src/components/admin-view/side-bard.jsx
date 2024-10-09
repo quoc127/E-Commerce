@@ -34,9 +34,9 @@ const  MenuItems = ({ setOpen }) => {
 
   return (
     <nav className="mt-8 flex-col flex gap-2">
-      {adminSidebarMenuItems.map((menuItem) => (
+      {adminSidebarMenuItems.map((menuItem, index) => (
         <div
-          key={menuItem.id}
+          key={index}
           onClick={() => {
             navigate(menuItem.path);
             setOpen ? setOpen(false) : null;

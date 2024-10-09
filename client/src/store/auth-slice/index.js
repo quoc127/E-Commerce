@@ -30,6 +30,11 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const logoutUser = createAsyncThunk("/user/logout", async () => {
+  const response = await postAuthLogin();
+  return response.data;
+});
+
 export const checkAuth = createAsyncThunk("/user/checkauth", async () => {
   const response = await getCheckAuth();
   return response.data;
@@ -101,6 +106,11 @@ const authSlice = createSlice({
         state.isAuthenticated = action.payload.success;
       })
       .addCase(loginUser.rejected, (state) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logoutUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
