@@ -2,8 +2,8 @@ import {
   Home,
   Package,
   Package2,
-  Settings,
   ShoppingCart,
+  Star,
 } from "lucide-react";
 import { useState } from "react";
 import {
@@ -26,6 +26,12 @@ const adminSidebarMenuItems = [
     label: "Orders",
     path: "/admin/orders",
     icon: <ShoppingCart className="h-5 w-5" />,
+  },
+  {
+    id: "brands",
+    label: "Brands",
+    path: "/admin/brands",
+    icon: <Star className="h-5 w-5" />,
   },
   {
     id: "products",
