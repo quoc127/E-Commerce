@@ -8,13 +8,10 @@ export const AdminLayout = () => {
   return (
     <div className="flex min-h-screen w-full">
       <div>
-        <AdminSideBar
-          openSidebar={openSidebar}
-          setOpenSidebar={setOpenSidebar}
-        />
+        <AdminSideBar />
       </div>
       <div className="flex flex-1 flex-col">
-        <AdminHeader setOpenSidebar={setOpenSidebar} />
+        <AdminHeader />
         <main className="flex-1 flex-col flex bg-muted/40 p-4 md:p-6">
           <Outlet />
         </main>

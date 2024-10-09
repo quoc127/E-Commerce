@@ -22,6 +22,7 @@ import { NotFound } from "./pages/not-found";
 import { AuthChangePassword } from "./pages/auth/change-password";
 import { AuthForgotPassword } from "./pages/auth/forgot-password";
 import { AuthResetPassword } from "./pages/auth/reset-password";
+import { AdminProduct } from "./pages/admin-view/product";
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -94,6 +95,7 @@ function App() {
         >
           <Route index element={<Navigate to="/admin/dashboard" />}></Route>
           <Route path="dashboard" element={<AdminDashboard />}></Route>
+          <Route path="products" element={<AdminProduct />}></Route>
         </Route>
         <Route
           path="/shop"

@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/store/auth-slice";
 
-export const AdminHeader = ({ setOpenSidebar }) => {
+export const AdminHeader = () => {
   const dispatch =  useDispatch()
 
   const handleLogout = (event) => { 
@@ -12,12 +12,6 @@ export const AdminHeader = ({ setOpenSidebar }) => {
   }
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-background border-b">
-      <Button
-        onClick={() => setOpenSidebar(true)}
-        className="lg:hidden sm:block"
-      >
-        <AlignJustify />
-      </Button>
       <div className="flex flex-1 justify-end">
         <Button onClick={handleLogout} className="inline-flex gap-2 items-center rounded-md px-4 py-2 text-sm font-medium shadow">
           <LogOut />

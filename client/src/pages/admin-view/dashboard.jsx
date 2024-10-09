@@ -1,5 +1,5 @@
 export const AdminDashboard = () => {
   return(
-    <div>admin dashboard</div>
+    <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">admin dashboard</div>
   )
 }
