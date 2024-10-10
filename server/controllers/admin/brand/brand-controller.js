@@ -16,7 +16,7 @@ module.exports.addBrand = async (req, res) => {
       description: description,
     });
 
-    newBrand.save();
+    await newBrand.save();
 
     res.status(201).json({
       success: true,
