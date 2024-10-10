@@ -31,7 +31,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getBrands, postNewBrand } from "@/store/admin-slice/brands-slice";
+import {
+  deleteBrand,
+  getBrands,
+  postNewBrand,
+} from "@/store/admin-slice/brands-slice";
 import dayjs from "dayjs";
 import {
   Sheet,
@@ -54,6 +58,7 @@ export const AdminBrand = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
   const { brandList } = useSelector((state) => state.adminBrands);
+
   const [isOpenAddBrand, setIsOpenAddBrand] = useState(false);
   const [formData, setFormData] = useState(initialFormdata);
 
@@ -64,14 +69,25 @@ export const AdminBrand = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     dispatch(postNewBrand(formData)).then((data) => {
-      console.log("Data",data);
-      
+      console.log("Data", data);
+
       if (data?.payload?.success) {
         toast({ title: data.payload.message });
         setIsOpenAddBrand(false);
         dispatch(getBrands());
       } else {
         toast({ title: data.payload.message, variant: "destructive" });
+      }
+    });
+  };
+
+  const handleDeleteBrand = (brandId) => {
+    dispatch(deleteBrand(brandId)).then((data) => {
+      if (data.payload.success) {
+        toast({
+          title: data.payload.message,
+        });
+        dispatch(getBrands());
       }
     });
   };
@@ -191,7 +207,13 @@ export const AdminBrand = () => {
                                       Actions
                                     </DropdownMenuLabel>
                                     <DropdownMenuItem>Edit</DropdownMenuItem>
-                                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleDeleteBrand(brandItem._id)
+                                      }
+                                    >
+                                      Delete
+                                    </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
                               </TableCell>

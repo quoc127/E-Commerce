@@ -19,3 +19,13 @@ export const postAddNewBrands = (name, description) => {
       }
     );
 };
+
+export const deleteAdminBrand = (id) => {
+  return axios
+    .delete(
+      `http://localhost:5000/api/brand/delete/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+};
