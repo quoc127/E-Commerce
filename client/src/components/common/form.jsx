@@ -11,6 +11,7 @@ import { Textarea } from "../ui/textarea";
 import { Link } from "react-router-dom";
 
 export const CommonForm = ({
+  hideChangeAndResetPassword,
   formControls,
   formData,
   setFormData,
@@ -118,7 +119,7 @@ export const CommonForm = ({
         })}
       </div>
       <div className="mt-2 flex justify-between">
-        <span>
+        <span className={hideChangeAndResetPassword ? "hidden" : "block"}>
           <Link
             className=" hover:underline hover:text-blue-300"
             to="/auth/change-password"
@@ -126,7 +127,7 @@ export const CommonForm = ({
             Change Password
           </Link>
         </span>
-        <span>
+        <span className={hideChangeAndResetPassword ? "hidden" : "block"}>
           <Link
             className=" hover:underline hover:text-blue-300"
             to="/auth/forgot-password"

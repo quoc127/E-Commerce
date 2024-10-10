@@ -30,16 +30,54 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getBrands } from "@/store/admin-slice/brands-slice";
+import { useEffect, useState } from "react";
+import { getBrands, postNewBrand } from "@/store/admin-slice/brands-slice";
 import dayjs from "dayjs";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { CommonForm } from "@/components/common/form";
+import { addBrandFormControls } from "@/config";
+import { useToast } from "@/hooks/use-toast";
+
+const initialFormdata = {
+  name: "",
+  description: "",
+};
 
 export const AdminBrand = () => {
   const dispatch = useDispatch();
+  const { toast } = useToast();
   const { brandList } = useSelector((state) => state.adminBrands);
+  const [isOpenAddBrand, setIsOpenAddBrand] = useState(false);
+  const [formData, setFormData] = useState(initialFormdata);
+
+  const handleOpenAddBrand = () => {
+    setIsOpenAddBrand(true);
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(postNewBrand(formData)).then((data) => {
+      console.log("Data",data);
+      
+      if (data?.payload?.success) {
+        toast({ title: data.payload.message });
+        setIsOpenAddBrand(false);
+        dispatch(getBrands());
+      } else {
+        toast({ title: data.payload.message, variant: "destructive" });
+      }
+    });
+  };
 
   useEffect(() => {
-    dispatch(getBrands())
+    dispatch(getBrands());
   }, [dispatch]);
 
   return (
@@ -82,7 +120,11 @@ export const AdminBrand = () => {
                   Export
                 </span>
               </Button>
-              <Button size="sm" className="h-8 gap-1">
+              <Button
+                onClick={() => handleOpenAddBrand()}
+                size="sm"
+                className="h-8 gap-1"
+              >
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                   Add Brand
@@ -115,13 +157,21 @@ export const AdminBrand = () => {
                           return (
                             <TableRow key={index}>
                               <TableCell className="font-medium">
-                              {brandItem.name}
+                                {brandItem.name}
                               </TableCell>
                               <TableCell>
-                                <Badge variant="outline">{brandItem.status}</Badge>
+                                <Badge variant="outline">
+                                  {brandItem.status}
+                                </Badge>
                               </TableCell>
-                              <TableCell className="w-2/4">{brandItem.description}</TableCell>
-                              <TableCell>{dayjs(brandItem.createdAt).format('HH:mm DD-MM-YYYY')}</TableCell>
+                              <TableCell className="w-2/4">
+                                {brandItem.description}
+                              </TableCell>
+                              <TableCell>
+                                {dayjs(brandItem.createdAt).format(
+                                  "HH:mm DD-MM-YYYY"
+                                )}
+                              </TableCell>
                               <TableCell>
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
@@ -154,13 +204,31 @@ export const AdminBrand = () => {
               </CardContent>
               <CardFooter>
                 <div className="text-xs text-muted-foreground">
-                  Showing <strong>1-{brandList.length}</strong> of <strong>{brandList.length}</strong> products
+                  Showing <strong>1-{brandList.length}</strong> of{" "}
+                  <strong>{brandList.length}</strong> products
                 </div>
               </CardFooter>
             </Card>
           </TabsContent>
         </Tabs>
       </main>
+      <Sheet open={isOpenAddBrand} onOpenChange={setIsOpenAddBrand}>
+        <SheetContent className="overflow-auto">
+          <SheetHeader>
+            <SheetTitle>Add New Brand</SheetTitle>
+            <SheetDescription></SheetDescription>
+            <CommonForm
+              hideChangeAndResetPassword={true}
+              formControls={addBrandFormControls}
+              formData={formData}
+              setFormData={setFormData}
+              buttonText={"Add New Brand"}
+              onSubmit={onSubmit}
+              isBtnDisabled={false}
+            />
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

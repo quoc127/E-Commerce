@@ -82,3 +82,20 @@ export const resetPasswordFormControls = [
     type: "password",
   },
 ];
+
+export const addBrandFormControls = [
+  {
+    label: "Name",
+    name: "name",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your brand name"
+  },
+  {
+    label: "Description",
+    name: "description",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your description"
+  },
+]

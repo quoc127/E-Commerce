@@ -49,6 +49,7 @@ export const AuthForgotPassword = () => {
         </p>
       </div>
       <CommonForm
+        hideChangeAndResetPassword={true}
         formControls={forgotPasswordFormControls}
         buttonText={"Send"}
         formData={formData}

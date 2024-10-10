@@ -5,3 +5,17 @@ export const getAllBrands = () => {
     withCredentials: true,
   });
 };
+
+export const postAddNewBrands = (name, description) => {
+  return axios
+    .post(
+      "http://localhost:5000/api/brand/add-brand",
+      {
+        name: name,
+        description: description,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+};
