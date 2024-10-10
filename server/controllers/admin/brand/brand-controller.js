@@ -34,7 +34,7 @@ module.exports.addBrand = async (req, res) => {
 
 module.exports.getAllBrand = async (req, res) => {
   try {
-    const allBrand = await Brand.find({ deleted: false });
+    const allBrand = await Brand.find({ deleted: false }).sort({createdAt: -1});
 
     res.status(200).json({
       success: true,
