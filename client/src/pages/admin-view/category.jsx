@@ -18,15 +18,21 @@ import { CommonForm } from "@/components/common/form";
 import { addBrandFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
 import { AdminTable } from "@/components/common/admin-table";
+import {
+  deleteCategory,
+  editCategory,
+  getCategories,
+  postNewCategory,
+} from "@/store/admin-slice/category-slice";
 
 const initialFormdata = {
   name: "",
   description: "",
 };
-export const AdminBrand = () => {
+export const AdminCategory = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
-  const { brandList } = useSelector((state) => state.adminBrands);
+  const { categoryList } = useSelector((state) => state.adminCategories);
 
   const [isOpenSheet, setIsOpenSheet] = useState(false);
   const [formData, setFormData] = useState(initialFormdata);
@@ -39,55 +45,55 @@ export const AdminBrand = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     currentEditedId !== null
-      ? dispatch(editBrand({ id: currentEditedId, formData })).then((data) => {
+      ? dispatch(editCategory({ id: currentEditedId, formData })).then((data) => {
           if (data?.payload?.success) {
             toast({
               title: data.payload.message,
             });
             setIsOpenSheet(false);
             setFormData(initialFormdata);
-            dispatch(getBrands());
+            dispatch(getCategories());
           } else {
             toast({ title: data.payload.message, variant: "destructive" });
           }
         })
-      : dispatch(postNewBrand(formData)).then((data) => {
+      : dispatch(postNewCategory(formData)).then((data) => {
           if (data?.payload?.success) {
             toast({ title: data.payload.message });
             setIsOpenSheet(false);
-            dispatch(getBrands());
+            dispatch(getCategories());
           } else {
             toast({ title: data.payload.message, variant: "destructive" });
           }
         });
   };
 
-  const handleDeleteBrand = (brandId) => {
-    dispatch(deleteBrand(brandId)).then((data) => {
+  const handleDeleteCategory = (categoryId) => {
+    dispatch(deleteCategory(categoryId)).then((data) => {
       if (data.payload.success) {
         toast({
           title: data.payload.message,
         });
-        dispatch(getBrands());
+        dispatch(getCategories());
       }
     });
   };
 
   useEffect(() => {
-    dispatch(getBrands());
+    dispatch(getCategories());
   }, [dispatch]);
 
   return (
     <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
       <AdminHeader />
       <AdminTable
-        buttonText={"Add Brand"}
-        titleText={"Brands"}
+        buttonText={"Add Category"}
+        titleText={"Categories"}
         handleOpenAdd={handleOpenAddBrand}
-        itemsList={brandList}
+        itemsList={categoryList}
         setCurrentEditedId={setCurrentEditedId}
         setIsOpenSheet={setIsOpenSheet}
-        handleDelete={handleDeleteBrand}
+        handleDelete={handleDeleteCategory}
       />
       <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
         <SheetContent className="overflow-auto">

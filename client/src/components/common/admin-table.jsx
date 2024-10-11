@@ -29,6 +29,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dayjs from "dayjs";
 export const AdminTable = ({
+  buttonText,
+  titleText,
   handleOpenAdd,
   itemsList,
   setCurrentEditedId,
@@ -80,7 +82,7 @@ export const AdminTable = ({
             >
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Brand
+                {buttonText}
               </span>
             </Button>
           </div>
@@ -88,9 +90,9 @@ export const AdminTable = ({
         <TabsContent value="all">
           <Card x-chunk="dashboard-06-chunk-0">
             <CardHeader>
-              <CardTitle>Brands</CardTitle>
+              <CardTitle>{titleText}</CardTitle>
               <CardDescription>
-                Manage your brands and view their sales performance.
+                Manage your {titleText.toLowerCase()} and view their sales performance.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -106,36 +108,36 @@ export const AdminTable = ({
                 </TableHeader>
                 <TableBody>
                   {itemsList && itemsList.length > 0
-                    ? itemsList.map((brandItem, index) => {
+                    ? itemsList.map((item, index) => {
                         return (
                           <TableRow key={index}>
                             <TableCell className="font-medium">
-                              {brandItem.name}
+                              {item.name}
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline">
-                                {brandItem.status}
+                                {item.status}
                               </Badge>
                             </TableCell>
                             <TableCell className="w-2/4">
-                              {brandItem.description}
+                              {item.description}
                             </TableCell>
                             <TableCell>
-                              {dayjs(brandItem.createdAt).format(
+                              {dayjs(item.createdAt).format(
                                 "HH:mm DD-MM-YYYY"
                               )}
                             </TableCell>
                             <TableCell className="flex gap-2">
                               <Button
                                 onClick={() => {
-                                  setCurrentEditedId(brandItem._id);
+                                  setCurrentEditedId(item._id);
                                   setIsOpenSheet(true);
                                 }}
                               >
                                 Edit
                               </Button>
                               <Button
-                                onClick={() => handleDelete(brandItem._id)}
+                                onClick={() => handleDelete(item._id)}
                               >
                                 Delete
                               </Button>

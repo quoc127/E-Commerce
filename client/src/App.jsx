@@ -24,6 +24,7 @@ import { AuthForgotPassword } from "./pages/auth/forgot-password";
 import { AuthResetPassword } from "./pages/auth/reset-password";
 import { AdminProduct } from "./pages/admin-view/product";
 import { AdminBrand } from "./pages/admin-view/brand";
+import { AdminCategory } from "./pages/admin-view/category";
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -97,6 +98,7 @@ function App() {
           <Route index element={<Navigate to="/admin/dashboard" />}></Route>
           <Route path="dashboard" element={<AdminDashboard />}></Route>
           <Route path="brands" element={<AdminBrand />}></Route>
+          <Route path="category" element={<AdminCategory />}></Route>
           <Route path="products" element={<AdminProduct />}></Route>
         </Route>
         <Route

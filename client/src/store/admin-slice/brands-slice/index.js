@@ -16,14 +16,6 @@ export const getBrands = createAsyncThunk("/admin/get-all-brans", async () => {
   return response.data;
 });
 
-// export const postNewBrand = createAsyncThunk(
-//   "/admin/add-brand",
-//   async ({ name, description }) => {
-//     const response = await postAddNewBrands(name, description);
-//     return response.data;
-//   }
-// );
-
 export const postNewBrand = createAsyncThunk(
   "/admin/add-brand",
   async ({ name, description }, { rejectWithValue }) => {

@@ -1,4 +1,5 @@
 import {
+  ChartBarStacked,
   Home,
   Package,
   Package2,
@@ -32,6 +33,12 @@ const adminSidebarMenuItems = [
     label: "Brands",
     path: "/admin/brands",
     icon: <Star className="h-5 w-5" />,
+  },
+  {
+    id: "category",
+    label: "Categories",
+    path: "/admin/category",
+    icon: <ChartBarStacked className="h-5 w-5" />,
   },
   {
     id: "products",
