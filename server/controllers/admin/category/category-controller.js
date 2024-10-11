@@ -34,12 +34,14 @@ module.exports.addCategory = async (req, res) => {
 
 module.exports.getAllCategory = async (req, res) => {
   try {
-    const allBrand = await Category.find({ deleted: false });
+    const allCategories = await Category.find({ deleted: false }).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
       message: "Get all Category",
-      data: allBrand,
+      data: allCategories,
     });
   } catch (error) {
     console.log(error);
