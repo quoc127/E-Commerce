@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   deleteAdminBrand,
+  editAdminBrand,
   getAllBrands,
   postAddNewBrands,
 } from "@/services/admin-api/brands-api";
@@ -39,9 +40,24 @@ export const postNewBrand = createAsyncThunk(
 
 export const deleteBrand = createAsyncThunk(
   "/admin/detele-brand",
-  async (id , { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const response = await deleteAdminBrand(id);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  }
+);
+
+export const editBrand = createAsyncThunk(
+  "/admin/edit-brand",
+  async ({ id, formData }, { rejectWithValue }) => {
+    
+    try {
+      const response = await editAdminBrand(id, formData);
       return response.data;
     } catch (error) {
       if (error.response && error.response.data) {
@@ -78,8 +94,7 @@ const brandsSlice = createSlice({
       .addCase(postNewBrand.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-      ;
+      });
   },
 });
 
