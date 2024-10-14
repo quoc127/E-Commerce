@@ -74,7 +74,7 @@ module.exports.login = async (req, res) => {
         email: checkUser.email,
         role: checkUser.role,
       },
-      process.env.JWT_SECRET_KEY,
+      process.env.JWT_ACESS_TOKEN_KEY,
       {
         expiresIn: "60m",
       }

@@ -6,7 +6,7 @@ module.exports.verifyToken = (req, res, next) => {
   if (authHeader && authHeader.startsWith("Bearer")) {
     const token = authHeader.split(" ")[1];
     try {
-      const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const decode = jwt.verify(token, process.env.JWT_ACESS_TOKEN_KEY);
       req.user = decode;
       next();
     } catch (error) {

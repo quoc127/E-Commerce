@@ -11,7 +11,7 @@ module.exports.authMiddleware = (req, res, next) => {
   }
 
   try {
-    const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decode = jwt.verify(token, process.env.JWT_ACESS_TOKEN_KEY);
     req.user = decode;
     next();
   } catch (error) {
