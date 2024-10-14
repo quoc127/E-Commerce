@@ -26,4 +26,6 @@ route.patch(
 
 route.get("/check-auth", checkAuth.authMiddleware, controller.authMiddleware);
 
+route.post("/refresh-token",  controller.refreshToken);
+
 module.exports = route;

@@ -79,8 +79,21 @@ module.exports.login = async (req, res) => {
         expiresIn: "60m",
       }
     );
+    const refreshToken = jwt.sign(
+      {
+        id: checkUser._id,
+        userName: checkUser.userName,
+        email: checkUser.email,
+        role: checkUser.role,
+      },
+      process.env.JWT_REFRES_TOKEN_KEY,
+      {
+        expiresIn: "3d",
+      }
+    );
     res
-      .cookie("token", token, { httpOnly: true, secure: false })
+      .cookie("token", token, { httpOnly: true, secure: true })
+      .cookie("refreshToken", refreshToken, { httpOnly: true, secure: true })
       .status(200)
       .json({
         success: true,
@@ -92,6 +105,7 @@ module.exports.login = async (req, res) => {
           role: checkUser.role,
         },
         token: token,
+        refreshToken: refreshToken,
       });
   } catch (error) {
     console.log(error);
@@ -104,7 +118,7 @@ module.exports.login = async (req, res) => {
 
 module.exports.logout = async (req, res) => {
   try {
-    res.clearCookie("token").status(200).json({
+    res.clearCookie("token").clearCookie("refreshToken").status(200).json({
       success: true,
       message: "Logout successfuly.",
     });
@@ -237,4 +251,48 @@ module.exports.authMiddleware = async (req, res) => {
     message: "Authenticated user",
     user: user,
   });
+};
+
+module.exports.refreshToken = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    
+    if (!refreshToken) {
+      return res.status(404).json({
+        success: false,
+        message: "Refresh Token not found!",
+      });
+    }
+    const decode = jwt.verify(refreshToken, process.env.JWT_REFRES_TOKEN_KEY);
+
+    if (!decode) {
+      return res.status(403).json({
+        success: false,
+        message: "Invalid Refresh Token",
+      });
+    }
+    const token = jwt.sign(
+      {
+        id: decode.id,
+        userName: decode.userName,
+        email: decode.email,
+        role: decode.role,
+      },
+      process.env.JWT_ACESS_TOKEN_KEY,
+      {
+        expiresIn: "60m",
+      }
+    );
+    res.status(200).json({
+      success: true,
+      message: "Refresh Token Successffuly",
+      token: token,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured",
+    });
+  }
 };
