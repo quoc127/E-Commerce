@@ -91,6 +91,7 @@ module.exports.login = async (req, res) => {
           email: checkUser.email,
           role: checkUser.role,
         },
+        token: token,
       });
   } catch (error) {
     console.log(error);
