@@ -7,6 +7,7 @@ const validate = require("../../../validates/admin/brand/brand-validates");
 route.post("/add-brand", validate.BrandValidate, controller.addBrand);
 
 route.get("/all-brand", controller.getAllBrand);
+route.get("/pagination", controller.getPagination);
 route.get("/:id", controller.getBrandById);
 
 route.patch("/edit/:id", validate.BrandValidate, controller.editBrand);

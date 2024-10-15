@@ -15,6 +15,7 @@ route.post(
 );
 
 route.get("/all-product", controller.getAllProduct);
+route.get("/pagination", controller.getPagination)
 route.get("/:id", controller.getProductById);
 
 route.patch(

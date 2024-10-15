@@ -1,4 +1,5 @@
 const Category = require("../../../models/Category");
+const { paginate } = require("../../../utils/paginate");
 
 module.exports.addCategory = async (req, res) => {
   try {
@@ -51,6 +52,29 @@ module.exports.getAllCategory = async (req, res) => {
     });
   }
 };
+
+module.exports.getPagination = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+
+    const paginateData = await paginate(Category, page, limit);
+
+    res.status(200).json({
+      success: true,
+      message: `Get products page ${page} successffuly.`,
+      totalPages: paginateData.totalPages,
+      totalProducts: paginateData.totalProducts,
+      products: paginateData.product,
+      currentPage: paginateData.currentPage,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured",
+    });
+  }
+}
 
 module.exports.getCategoryById = async (req, res) => {
   try {

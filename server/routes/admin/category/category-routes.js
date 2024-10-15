@@ -7,6 +7,7 @@ const validate = require("../../../validates/admin/category/category-validates")
 route.post("/add-category", validate.CategoryValidate, controller.addCategory);
 
 route.get("/all-category", controller.getAllCategory);
+route.get("/pagination", controller.getPagination);
 route.get("/:id", controller.getCategoryById);
 
 route.patch("/edit/:id", validate.CategoryValidate, controller.editCategory);
