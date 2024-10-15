@@ -61,8 +61,8 @@ module.exports.getPagination = async (req, res) => {
       success: true,
       message: `Get products page ${page} successffuly.`,
       totalPages: paginateData.totalPages,
-      totalProducts: paginateData.totalProducts,
-      products: paginateData.product,
+      totalItems: paginateData.totalItems,
+      data: paginateData.items,
       currentPage: paginateData.currentPage,
     });
   } catch (error) {
