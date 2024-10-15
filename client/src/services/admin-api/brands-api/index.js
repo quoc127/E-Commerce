@@ -10,6 +10,12 @@ export const getAllBrands = () => {
   });
 };
 
+export const getBrandsPaginate = (page, limit) => {
+  return axios.get(`http://localhost:5000/api/brand/pagination?page=${page}&limit=${limit}`, {
+    withCredentials: true,
+  });
+};
+
 export const postAddNewBrands = (name, description) => {
   return axios.post(
     "http://localhost:5000/api/brand/add-brand",

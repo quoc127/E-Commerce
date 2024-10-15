@@ -13,7 +13,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dayjs from "dayjs";
+import { current } from "@reduxjs/toolkit";
 export const AdminTable = ({
   buttonText,
   titleText,
@@ -36,7 +36,12 @@ export const AdminTable = ({
   setCurrentEditedId,
   setIsOpenSheet,
   handleDelete,
+  totalItems,
+  currentPage,
+  itemsPerPage,
 }) => {
+  const startItem = (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Tabs defaultValue="all">
@@ -92,7 +97,8 @@ export const AdminTable = ({
             <CardHeader>
               <CardTitle>{titleText}</CardTitle>
               <CardDescription>
-                Manage your {titleText.toLowerCase()} and view their sales performance.
+                Manage your {titleText.toLowerCase()} and view their sales
+                performance.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -115,17 +121,13 @@ export const AdminTable = ({
                               {item.name}
                             </TableCell>
                             <TableCell>
-                              <Badge variant="outline">
-                                {item.status}
-                              </Badge>
+                              <Badge variant="outline">{item.status}</Badge>
                             </TableCell>
                             <TableCell className="w-2/4">
                               {item.description}
                             </TableCell>
                             <TableCell>
-                              {dayjs(item.createdAt).format(
-                                "HH:mm DD-MM-YYYY"
-                              )}
+                              {dayjs(item.createdAt).format("HH:mm DD-MM-YYYY")}
                             </TableCell>
                             <TableCell className="flex gap-2">
                               <Button
@@ -136,9 +138,7 @@ export const AdminTable = ({
                               >
                                 Edit
                               </Button>
-                              <Button
-                                onClick={() => handleDelete(item._id)}
-                              >
+                              <Button onClick={() => handleDelete(item._id)}>
                                 Delete
                               </Button>
                             </TableCell>
@@ -151,8 +151,11 @@ export const AdminTable = ({
             </CardContent>
             <CardFooter>
               <div className="text-xs text-muted-foreground">
-                Showing <strong>1-{itemsList.length}</strong> of{" "}
-                <strong>{itemsList.length}</strong> products
+                Showing{" "}
+                <strong>
+                  {startItem}-{endItem}
+                </strong>{" "}
+                of <strong>{totalItems}</strong> {titleText.toLowerCase()}
               </div>
             </CardFooter>
           </Card>
