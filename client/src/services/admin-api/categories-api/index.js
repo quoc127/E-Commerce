@@ -1,18 +1,28 @@
 import axios from "axios";
 
 export const getAllCategories = () => {
-  return axios.get("http://localhost:5000/api/category/all-category");
-};
-
-export const postAddNewCategory = ({ name, description }) => {
-  return axios.post("http://localhost:5000/api/category/add-category", {
-    name: name,
-    description: description,
+  return axios.get("http://localhost:5000/api/category/all-category", {
+    withCredentials: true,
   });
 };
 
+export const postAddNewCategory = ({ name, description }) => {
+  return axios.post(
+    "http://localhost:5000/api/category/add-category",
+    {
+      name: name,
+      description: description,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+};
+
 export const deleteAdminCategory = (id) => {
-  return axios.delete(`http://localhost:5000/api/category/delete/${id}`);
+  return axios.delete(`http://localhost:5000/api/category/delete/${id}`, {
+    withCredentials: true,
+  });
 };
 
 export const editAdminCategory = (id, { name, description }) => {
@@ -21,6 +31,9 @@ export const editAdminCategory = (id, { name, description }) => {
     {
       name: name,
       description: description,
+    },
+    {
+      withCredentials: true,
     },
     {
       headers: {

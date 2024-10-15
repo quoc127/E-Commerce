@@ -1,8 +1,12 @@
 import axios from "axios";
 
 export const getAllBrands = () => {
+  // const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1];
   return axios.get("http://localhost:5000/api/brand/all-brand", {
     withCredentials: true,
+    // headers: {
+    //   Authorization: `Bearer ${token}`,
+    // },
   });
 };
 
@@ -26,9 +30,11 @@ export const deleteAdminBrand = (id) => {
 };
 
 export const editAdminBrand = (id, { name, description }) => {
-  
   return axios.patch(
     `http://localhost:5000/api/brand/edit/${id}`,
+    {
+      withCredentials: true,
+    },
     {
       name: name,
       description: description,
@@ -36,7 +42,7 @@ export const editAdminBrand = (id, { name, description }) => {
     {
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     }
   );
 };
