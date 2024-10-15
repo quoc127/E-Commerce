@@ -2,12 +2,6 @@ import { AdminHeader } from "@/components/admin-view/header";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
-  deleteBrand,
-  editBrand,
-  getBrands,
-  postNewBrand,
-} from "@/store/admin-slice/brands-slice";
-import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -22,8 +16,10 @@ import {
   deleteCategory,
   editCategory,
   getCategories,
+  getCategoriesPagination,
   postNewCategory,
 } from "@/store/admin-slice/category-slice";
+import { AdminPagination } from "@/components/common/paginate";
 
 const initialFormdata = {
   name: "",
@@ -32,11 +28,15 @@ const initialFormdata = {
 export const AdminCategory = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
-  const { categoryList } = useSelector((state) => state.adminCategories);
+  const { categoryList, totalPages, totalItems } = useSelector(
+    (state) => state.adminCategories
+  );
 
   const [isOpenSheet, setIsOpenSheet] = useState(false);
   const [formData, setFormData] = useState(initialFormdata);
   const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const handleOpenAddBrand = () => {
     setIsOpenSheet(true);
@@ -45,23 +45,35 @@ export const AdminCategory = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     currentEditedId !== null
-      ? dispatch(editCategory({ id: currentEditedId, formData })).then((data) => {
-          if (data?.payload?.success) {
-            toast({
-              title: data.payload.message,
-            });
-            setIsOpenSheet(false);
-            setFormData(initialFormdata);
-            dispatch(getCategories());
-          } else {
-            toast({ title: data.payload.message, variant: "destructive" });
+      ? dispatch(editCategory({ id: currentEditedId, formData })).then(
+          (data) => {
+            if (data?.payload?.success) {
+              toast({
+                title: data.payload.message,
+              });
+              setIsOpenSheet(false);
+              setFormData(initialFormdata);
+              dispatch(
+                getCategoriesPagination({
+                  page: currentPage,
+                  limit: itemsPerPage,
+                })
+              );
+              toast({ title: data.payload.message, variant: "destructive" });
+            }
           }
-        })
+        )
       : dispatch(postNewCategory(formData)).then((data) => {
           if (data?.payload?.success) {
             toast({ title: data.payload.message });
             setIsOpenSheet(false);
-            dispatch(getCategories());
+            setFormData(initialFormdata);
+            dispatch(
+              getCategoriesPagination({
+                page: currentPage,
+                limit: itemsPerPage,
+              })
+            );
           } else {
             toast({ title: data.payload.message, variant: "destructive" });
           }
@@ -80,8 +92,10 @@ export const AdminCategory = () => {
   };
 
   useEffect(() => {
-    dispatch(getCategories());
-  }, [dispatch]);
+    dispatch(
+      getCategoriesPagination({ page: currentPage, limit: itemsPerPage })
+    );
+  }, [dispatch, currentPage, itemsPerPage]);
 
   return (
     <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -94,6 +108,15 @@ export const AdminCategory = () => {
         setCurrentEditedId={setCurrentEditedId}
         setIsOpenSheet={setIsOpenSheet}
         handleDelete={handleDeleteCategory}
+        totalItems={totalItems}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+      />
+      <AdminPagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        itemsPerPage={itemsPerPage}
       />
       <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
         <SheetContent className="overflow-auto">

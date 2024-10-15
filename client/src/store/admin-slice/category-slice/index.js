@@ -2,6 +2,7 @@ import {
   deleteAdminCategory,
   editAdminCategory,
   getAllCategories,
+  getCategoriesPaginate,
   postAddNewCategory,
 } from "@/services/admin-api/categories-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -9,12 +10,22 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: false,
   categoryList: [],
+  totalPages: 0,
+  totalItems: 0,
 };
 
 export const getCategories = createAsyncThunk(
   "/admin/all-categories",
   async () => {
     const response = await getAllCategories();
+    return response.data;
+  }
+);
+
+export const getCategoriesPagination = createAsyncThunk(
+  "/admin/get-brans-pagination",
+  async ({ page, limit }) => {
+    const response = await getCategoriesPaginate(page, limit);
     return response.data;
   }
 );
@@ -69,6 +80,18 @@ const categorySlice = createSlice({
         state.categoryList = action.payload.data;
       })
       .addCase(getCategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.categoryList = [];
+      }).addCase(getCategoriesPagination.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCategoriesPagination.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.categoryList = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+        state.totalItems = action.payload.totalItems;
+      })
+      .addCase(getCategoriesPagination.rejected, (state, action) => {
         state.isLoading = false;
         state.categoryList = [];
       })

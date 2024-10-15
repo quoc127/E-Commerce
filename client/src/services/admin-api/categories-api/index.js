@@ -6,6 +6,12 @@ export const getAllCategories = () => {
   });
 };
 
+export const getCategoriesPaginate = (page, limit) => {
+  return axios.get(`http://localhost:5000/api/category/pagination?page=${page}&limit=${limit}`, {
+    withCredentials: true,
+  });
+};
+
 export const postAddNewCategory = ({ name, description }) => {
   return axios.post(
     "http://localhost:5000/api/category/add-category",
