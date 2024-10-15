@@ -125,7 +125,7 @@ module.exports.editCategory = async (req, res) => {
     );
     res.status(200).json({
       success: true,
-      message: `Edit Category with ${id} successfully.`,
+      message: `Edit Category with successfully.`,
     });
   } catch (error) {
     console.log(error);

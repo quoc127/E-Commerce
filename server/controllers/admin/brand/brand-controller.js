@@ -123,7 +123,7 @@ module.exports.editBrand = async (req, res) => {
     );
     res.status(200).json({
       success: true,
-      message: `Edit Brand with ${id} successfully.`,
+      message: `Edit Brand with successfully.`,
     });
   } catch (error) {
     console.log(error);
