@@ -39,11 +39,11 @@ export const editAdminBrand = (id, { name, description }) => {
   return axios.patch(
     `http://localhost:5000/api/brand/edit/${id}`,
     {
-      withCredentials: true,
-    },
-    {
       name: name,
       description: description,
+    },
+     {
+      withCredentials: true,
     },
     {
       headers: {

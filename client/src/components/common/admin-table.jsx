@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dayjs from "dayjs";
-import { current } from "@reduxjs/toolkit";
 export const AdminTable = ({
   buttonText,
   titleText,
@@ -35,7 +34,9 @@ export const AdminTable = ({
   itemsList,
   setCurrentEditedId,
   setIsOpenSheet,
+  setIsOpenAlert,
   handleDelete,
+  handleEdit,
   totalItems,
   currentPage,
   itemsPerPage,
@@ -132,13 +133,19 @@ export const AdminTable = ({
                             <TableCell className="flex gap-2">
                               <Button
                                 onClick={() => {
+                                  handleEdit(item);
                                   setCurrentEditedId(item._id);
                                   setIsOpenSheet(true);
                                 }}
                               >
                                 Edit
                               </Button>
-                              <Button onClick={() => handleDelete(item._id)}>
+                              <Button
+                                onClick={() => {
+                                  handleDelete(item);
+                                  setIsOpenAlert(true)
+                                }}
+                              >
                                 Delete
                               </Button>
                             </TableCell>

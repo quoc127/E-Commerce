@@ -42,6 +42,13 @@ export const AdminCategory = () => {
     setIsOpenSheet(true);
   };
 
+  const handleEditCategory = (category) => {
+    setFormData({
+      name: category.name,
+      description: category.description,
+    });
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
     currentEditedId !== null
@@ -59,6 +66,7 @@ export const AdminCategory = () => {
                   limit: itemsPerPage,
                 })
               );
+            } else {
               toast({ title: data.payload.message, variant: "destructive" });
             }
           }
@@ -108,6 +116,7 @@ export const AdminCategory = () => {
         setCurrentEditedId={setCurrentEditedId}
         setIsOpenSheet={setIsOpenSheet}
         handleDelete={handleDeleteCategory}
+        handleEdit={handleEditCategory}
         totalItems={totalItems}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
@@ -122,7 +131,7 @@ export const AdminCategory = () => {
         <SheetContent className="overflow-auto">
           <SheetHeader>
             <SheetTitle>
-              {currentEditedId ? "Edit Brand" : "Add New Brand"}
+              {currentEditedId ? "Edit Category" : "Add New Brand"}
             </SheetTitle>
             <SheetDescription></SheetDescription>
             <CommonForm
