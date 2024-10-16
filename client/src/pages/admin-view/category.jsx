@@ -9,7 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { CommonForm } from "@/components/common/form";
-import { addBrandFormControls } from "@/config";
+import { addBrandFormControls, addCategoryFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
 import { AdminTable } from "@/components/common/admin-table";
 import {
@@ -158,15 +158,15 @@ export const AdminCategory = () => {
         <SheetContent className="overflow-auto">
           <SheetHeader>
             <SheetTitle>
-              {currentEditedId ? "Edit Category" : "Add New Brand"}
+              {currentEditedId ? "Edit Category" : "Add New Category"}
             </SheetTitle>
             <SheetDescription></SheetDescription>
             <CommonForm
               hideChangeAndResetPassword={true}
-              formControls={addBrandFormControls}
+              formControls={addCategoryFormControls}
               formData={formData}
               setFormData={setFormData}
-              buttonText={currentEditedId ? "Save Change" : "Add New Brand"}
+              buttonText={currentEditedId ? "Save Change" : "Add New Category"}
               onSubmit={onSubmit}
               isBtnDisabled={false}
             />
