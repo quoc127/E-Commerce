@@ -1,5 +1,6 @@
 import { AdminHeader } from "@/components/admin-view/header";
 import { AdminDeleteDialog } from "@/components/common/admin-delete-dialog";
+import { AdminFormProduct } from "@/components/common/admin-form-product";
 import { AdminTable } from "@/components/common/admin-table";
 import { AdminPagination } from "@/components/common/paginate";
 import { useToast } from "@/hooks/use-toast";
@@ -10,16 +11,23 @@ import {
 } from "@/store/admin-slice/products-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 const initialFormdata = {
-  name: "",
-  price: 0,
+  productName: "",
+  price: "",
   description: "",
-  image: "",
-  total: 0,
-  status: "",
-  brandId: "",
-  categoryId: "",
+  productImage: "",
+  totalProducts: "",
+  brandName: "",
+  categoryName: "",
 };
 
 export const AdminProduct = () => {
@@ -88,7 +96,6 @@ export const AdminProduct = () => {
           handleOpenAdd={handleOpenAddProduct}
           itemsList={productsList}
           setCurrentEditedId={setCurrentEditedId}
-          setIsOpenSheet={setIsOpenSheet}
           setIsOpenAlert={setIsOpenAlert}
           handleDelete={setIsProductItemToDelete}
           handleEdit={handleEditProduct}
@@ -108,6 +115,16 @@ export const AdminProduct = () => {
           istemToDelete={isProductItemToDelete}
           setIsConfirmDelete={setIsConfirmDelete}
         />
+
+        <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
+          <SheetContent className="overflow-auto">
+            <SheetHeader>
+              <SheetTitle>Add New Product</SheetTitle>
+              <SheetDescription></SheetDescription>
+              <AdminFormProduct formData={formData} setFormData={setFormData} />
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );
