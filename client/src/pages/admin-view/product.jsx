@@ -11,7 +11,6 @@ import {
 } from "@/store/admin-slice/products-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -44,7 +43,7 @@ export const AdminProduct = () => {
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const [isProductItemToDelete, setIsProductItemToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(2);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const handleOpenAddProduct = () => {
     setIsOpenSheet(true);
@@ -121,7 +120,14 @@ export const AdminProduct = () => {
             <SheetHeader>
               <SheetTitle>Add New Product</SheetTitle>
               <SheetDescription></SheetDescription>
-              <AdminFormProduct formData={formData} setFormData={setFormData} />
+              <AdminFormProduct
+                formData={formData}
+                setFormData={setFormData}
+                setIsOpenSheet={setIsOpenSheet}
+                initialFormdata={initialFormdata}
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+              />
             </SheetHeader>
           </SheetContent>
         </Sheet>

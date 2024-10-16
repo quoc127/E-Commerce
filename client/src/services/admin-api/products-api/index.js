@@ -7,22 +7,38 @@ export const getAllProducts = () => {
 };
 
 export const getProductsPaginate = (page, limit) => {
-  return axios.get(`http://localhost:5000/api/product/pagination?page=${page}&limit=${limit}`, {
-    withCredentials: true,
-  });
-};
-
-export const postAddNewProduct = (name, description) => {
-  return axios.post(
-    "http://localhost:5000/api/product/add-product",
-    {
-      name: name,
-      description: description,
-    },
+  return axios.get(
+    `http://localhost:5000/api/product/pagination?page=${page}&limit=${limit}`,
     {
       withCredentials: true,
     }
   );
+};
+
+export const postAddNewProduct = ({
+  productName,
+  price,
+  description,
+  productImage,
+  totalProducts,
+  brandName,
+  categoryName,
+}) => {
+  const formData = new FormData();
+  formData.append("name", productName);
+  formData.append("price", price);
+  formData.append("description", description);
+  formData.append("total", totalProducts);
+  formData.append("brandId", brandName);
+  formData.append("categoryId", categoryName);
+
+  if (productImage) {
+    formData.append("image", productImage);
+  }
+
+  return axios.post("http://localhost:5000/api/product/add-product", formData, {
+    withCredentials: true,
+  });
 };
 
 export const deleteProduct = (id) => {
@@ -38,7 +54,7 @@ export const editProduct = (id, { name, description }) => {
       name: name,
       description: description,
     },
-     {
+    {
       withCredentials: true,
     },
     {

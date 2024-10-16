@@ -1,8 +1,31 @@
+import { useEffect, useState } from "react";
 import { InputField } from "./input-filed";
 import { SelectField } from "./select-field";
 import { TextAreaField } from "./text-area-field";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAdminProductsPagination,
+  postAdminNewProduct,
+} from "@/store/admin-slice/products-slice";
+import { useToast } from "@/hooks/use-toast";
+import { getBrands } from "@/store/admin-slice/brands-slice";
+import { getCategories } from "@/store/admin-slice/category-slice";
 
-export const AdminFormProduct = ({ formData, setFormData }) => {
+export const AdminFormProduct = ({
+  formData,
+  setFormData,
+  setIsOpenSheet,
+  initialFormdata,
+  currentPage,
+  itemsPerPage,
+}) => {
+  const { brandList } = useSelector((state) => state.adminBrands);
+  const { categoryList } = useSelector((state) => state.adminCategories);
+
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+  const [previewImage, setPreviewImage] = useState(null);
+
   const handleChangeValue = (event) => {
     const { name, value } = event.target;
     setFormData((prevValue) => ({
@@ -12,16 +35,51 @@ export const AdminFormProduct = ({ formData, setFormData }) => {
   };
 
   const handleChangeFile = (event) => {
+    const file = event.target.files[0];
     setFormData((prevValues) => ({
       ...prevValues,
-      productImage: event.target.files[0],
+      productImage: file,
     }));
+    setPreviewImage(URL.createObjectURL(file));
+  };
+
+  const handleRemoveImage = () => {
+    setFormData((prevValues) => ({
+      ...prevValues,
+      productImage: null,
+    }));
+    setPreviewImage(null);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    dispatch(postAdminNewProduct(formData)).then((data) => {
+      if (data?.payload?.success) {
+        toast({ title: data.payload.message });
+        setIsOpenSheet(false);
+        setFormData(initialFormdata);
+        dispatch(
+          getAdminProductsPagination({ page: currentPage, limit: itemsPerPage })
+        );
+      } else {
+        toast({ title: data.payload.message, variant: "destructive" });
+      }
+    });
   };
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getBrands());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      getAdminProductsPagination({ page: currentPage, limit: itemsPerPage })
+    );
+  }, [dispatch, currentPage, itemsPerPage]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -52,18 +110,20 @@ export const AdminFormProduct = ({ formData, setFormData }) => {
               min={1}
             />
             <SelectField
+              text="brand"
               label="Brand Name"
               name="brandName"
               value={formData.brandName}
               onChange={handleChangeValue}
-              options={["United States", "Canada", "Mexico"]}
+              options={brandList.map((brand) => brand.name)}
             />
             <SelectField
+              text="categpry"
               label="Category Name"
               name="categoryName"
               value={formData.categoryName}
               onChange={handleChangeValue}
-              options={["United States", "Canada", "Mexico"]}
+              options={categoryList.map((category) => category.name)}
             />
             <TextAreaField
               label="Description"
@@ -77,38 +137,61 @@ export const AdminFormProduct = ({ formData, setFormData }) => {
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-300"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    data-slot="icon"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                  {previewImage ? (
+                    <div className="relative">
+                      <img
+                        src={previewImage}
+                        alt="Preview"
+                        className="mx-auto h-48 w-48 object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="absolute top-[-30px] right-[-50px] bg-gray-500 text-white rounded-full p-1"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  ) : (
                     <label
                       htmlFor="file-upload"
-                      className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                      className="relative cursor-pointer"
                     >
-                      <span>Upload a file</span>
+                      <svg
+                        className="mx-auto h-12 w-12 text-gray-300"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
                       <input
                         id="file-upload"
                         name="file-upload"
                         type="file"
+                        accept="image/*"
                         onChange={handleChangeFile}
                         className="sr-only"
                       />
                     </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs leading-5 text-gray-600">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
+                  )}
                 </div>
               </div>
             </div>

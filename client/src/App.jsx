@@ -50,7 +50,7 @@ function App() {
   }, [dispatch]);
 
   if (isLoading) {
-    return <Skeleton className="w-[800] bg-black h-[600px]" />;
+    return <Skeleton className="w-full bg-black h-screen" />;
   }
   return (
     <div>

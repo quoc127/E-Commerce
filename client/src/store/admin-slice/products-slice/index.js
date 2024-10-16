@@ -23,9 +23,9 @@ export const getAdminProductsPagination = createAsyncThunk(
 
 export const postAdminNewProduct = createAsyncThunk(
   "/admin/add-product",
-  async ({ name, description }, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const response = await postAddNewProduct(name, description);
+      const response = await postAddNewProduct(formData);
       return response.data;
     } catch (error) {
       if (error.response && error.response.data) {

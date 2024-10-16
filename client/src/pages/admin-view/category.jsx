@@ -9,7 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { CommonForm } from "@/components/common/form";
-import { addBrandFormControls, addCategoryFormControls } from "@/config";
+import { addCategoryFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
 import { AdminTable } from "@/components/common/admin-table";
 import {
