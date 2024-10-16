@@ -32,7 +32,7 @@ module.exports.addProduct = async (req, res) => {
 
 module.exports.getAllProduct = async (req, res) => {
   try {
-    const allProducts = await Product.find({ deleted: false });
+    const allProducts = await Product.find({ deleted: false }).sort({createdAt: -1});
 
     res.status(200).json({
       success: true,
@@ -149,8 +149,8 @@ module.exports.getPagination = async (req, res) => {
       success: true,
       message: `Get products page ${page} successffuly.`,
       totalPages: paginateData.totalPages,
-      totalProducts: paginateData.totalProducts,
-      products: paginateData.product,
+      totalItems: paginateData.totalItems,
+      data: paginateData.items,
       currentPage: paginateData.currentPage,
     });
   } catch (error) {

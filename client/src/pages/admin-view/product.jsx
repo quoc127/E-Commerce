@@ -1,176 +1,113 @@
-import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AdminHeader } from "@/components/admin-view/header";
+import { AdminDeleteDialog } from "@/components/common/admin-delete-dialog";
+import { AdminTable } from "@/components/common/admin-table";
+import { AdminPagination } from "@/components/common/paginate";
+import { useToast } from "@/hooks/use-toast";
+import {
+  deleteAdminProduct,
+  getAdminAllProducts,
+  getAdminProductsPagination,
+} from "@/store/admin-slice/products-slice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+const initialFormdata = {
+  name: "",
+  price: 0,
+  description: "",
+  image: "",
+  total: 0,
+  status: "",
+  brandId: "",
+  categoryId: "",
+};
 
 export const AdminProduct = () => {
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+  const { productsList, totalPages, totalItems } = useSelector(
+    (state) => state.adminProducts
+  );
+
+  const [isOpenSheet, setIsOpenSheet] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [isConfirmDelete, setIsConfirmDelete] = useState(false);
+  const [formData, setFormData] = useState(initialFormdata);
+  const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [isProductItemToDelete, setIsProductItemToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(2);
+
+  const handleOpenAddProduct = () => {
+    setIsOpenSheet(true);
+  };
+
+  const handleEditProduct = (brand) => {
+    setFormData({
+      name: brand.name,
+      description: brand.description,
+    });
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  useEffect(() => {
+    if (isConfirmDelete) {
+      dispatch(deleteAdminProduct(isProductItemToDelete._id)).then((data) => {
+        if (data.payload.success) {
+          toast({
+            title: data.payload.message,
+          });
+          dispatch(
+            getAdminProductsPagination({
+              page: currentPage,
+              limit: itemsPerPage,
+            })
+          );
+        }
+      });
+      setIsConfirmDelete(false);
+    }
+  }, [isConfirmDelete]);
+
+  useEffect(() => {
+    dispatch(
+      getAdminProductsPagination({ page: currentPage, limit: itemsPerPage })
+    );
+  }, [dispatch, currentPage, itemsPerPage]);
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <AdminHeader />
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <Tabs defaultValue="all">
-            <div className="flex items-center">
-              <TabsList>
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="active">Active</TabsTrigger>
-                <TabsTrigger value="draft">Draft</TabsTrigger>
-                <TabsTrigger value="archived" className="hidden sm:flex">
-                  Archived
-                </TabsTrigger>
-              </TabsList>
-              <div className="ml-auto flex items-center gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-8 gap-1">
-                      <ListFilter className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Filter
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem checked>
-                      Active
-                    </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
-                      Archived
-                    </DropdownMenuCheckboxItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <Button size="sm" variant="outline" className="h-8 gap-1">
-                  <File className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Export
-                  </span>
-                </Button>
-                <Button size="sm" className="h-8 gap-1">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Add Product
-                  </span>
-                </Button>
-              </div>
-            </div>
-            <TabsContent value="all">
-              <Card x-chunk="dashboard-06-chunk-0">
-                <CardHeader>
-                  <CardTitle>Products</CardTitle>
-                  <CardDescription>
-                    Manage your products and view their sales performance.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>
-                         Image
-                        </TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Total Sales</TableHead>
-                        <TableHead>Created at</TableHead>
-                        <TableHead>
-                          Actions
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          <Avatar
-                            alt="Product image"
-                            className="aspect-square rounded-md object-cover"
-                            height="64"
-                            src="/placeholder.svg"
-                            width="64"
-                          >
-                            <AvatarFallback className="bg-black text-white font-extrabold">
-                              Q
-                            </AvatarFallback>
-                          </Avatar>
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          Laser Lemonade Machine
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Draft</Badge>
-                        </TableCell>
-                        <TableCell>
-                          $499.99
-                        </TableCell>
-                        <TableCell>
-                          25
-                        </TableCell>
-                        <TableCell>
-                          2023-07-12 10:42 AM
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </CardContent>
-                <CardFooter>
-                  <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                    products
-                  </div>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </main>
+        <AdminTable
+          buttonText={"Add Product"}
+          titleText={"Products"}
+          handleOpenAdd={handleOpenAddProduct}
+          itemsList={productsList}
+          setCurrentEditedId={setCurrentEditedId}
+          setIsOpenSheet={setIsOpenSheet}
+          setIsOpenAlert={setIsOpenAlert}
+          handleDelete={setIsProductItemToDelete}
+          handleEdit={handleEditProduct}
+          totalItems={totalItems}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+        />
+        <AdminPagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          itemsPerPage={itemsPerPage}
+        />
+        <AdminDeleteDialog
+          isOpenAlert={isOpenAlert}
+          setIsOpenAlert={setIsOpenAlert}
+          istemToDelete={isProductItemToDelete}
+          setIsConfirmDelete={setIsConfirmDelete}
+        />
       </div>
     </div>
   );

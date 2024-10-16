@@ -89,13 +89,81 @@ export const addBrandFormControls = [
     name: "name",
     componentType: "input",
     type: "text",
-    placeholder: "Enter your brand name"
+    placeholder: "Enter your brand name",
   },
   {
     label: "Description",
     name: "description",
     componentType: "input",
     type: "text",
-    placeholder: "Enter your description"
+    placeholder: "Enter your description",
   },
-]
+];
+
+export const addCategoryFormControls = [
+  {
+    label: "Name",
+    name: "name",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your category name",
+  },
+  {
+    label: "Description",
+    name: "description",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your description",
+  },
+];
+
+export const addProductFormControls = [
+  {
+    label: "Image",
+    name: "image",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your image",
+  },
+  {
+    label: "Name",
+    name: "name",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your product name",
+  },
+  {
+    label: "Price",
+    name: "price",
+    componentType: "input",
+    type: "number",
+    placeholder: "Enter your price",
+  },
+  {
+    label: "Description",
+    name: "description",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your description",
+  },
+  {
+    label: "Total",
+    name: "total",
+    componentType: "input",
+    type: "number",
+    placeholder: "Enter total product",
+  },
+  {
+    label: "Brand Name",
+    name: "brand-name",
+    componentType: "select",
+    options: [
+      { id: "nike", label: "Nike" },
+      { id: "adidas", label: "Adidas" },
+      { id: "puma", label: "Puma" },
+      { id: "levi", label: "Levi's" },
+      { id: "zara", label: "Zara" },
+      { id: "h&m", label: "H&M" },
+    ],
+  },
+];
