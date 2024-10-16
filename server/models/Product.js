@@ -29,16 +29,8 @@ const ProductSchema = mongoose.Schema(
       default: false,
     },
     deletedAt: Date,
-    brandId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Brand",
-      required: true,
-    },
-    categoryId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
-    },
+    brandId: String,
+    categoryId: String,
   },
   {
     timestamps: true,
