@@ -20,17 +20,7 @@ import { addBrandFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
 import { AdminTable } from "@/components/common/admin-table";
 import { AdminPagination } from "@/components/common/paginate";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AdminDeleteDialog } from "@/components/common/admin-delete-dialog";
 
 const initialFormdata = {
   name: "",
@@ -50,7 +40,7 @@ export const AdminBrand = () => {
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const [isBrandItemToDelete, setIsBrandItemToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const handleOpenAddBrand = () => {
     setIsOpenSheet(true);
@@ -94,29 +84,6 @@ export const AdminBrand = () => {
         });
   };
 
-  const Dialog = () => {
-    return (
-      <AlertDialog open={isOpenAlert} onOpenChange={setIsOpenAlert}>
-        <AlertDialogTrigger>Open</AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure delete?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Do you want remove item: 1
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-            onClick={() => setIsConfirmDelete(true)}
-            >
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    );
-  };
   useEffect(() => {
     if (isConfirmDelete) {
       dispatch(deleteBrand(isBrandItemToDelete._id)).then((data) => {
@@ -124,10 +91,12 @@ export const AdminBrand = () => {
           toast({
             title: data.payload.message,
           });
-          dispatch(getBrands());
+          dispatch(
+            getBrandsPagination({ page: currentPage, limit: itemsPerPage })
+          );
         }
       });
-      setIsConfirmDelete(false)
+      setIsConfirmDelete(false);
     }
   }, [isConfirmDelete]);
 
@@ -158,7 +127,12 @@ export const AdminBrand = () => {
         setCurrentPage={setCurrentPage}
         itemsPerPage={itemsPerPage}
       />
-      <Dialog />
+      <AdminDeleteDialog
+        isOpenAlert={isOpenAlert}
+        setIsOpenAlert={setIsOpenAlert}
+        istemToDelete={isBrandItemToDelete}
+        setIsConfirmDelete={setIsConfirmDelete}
+      />
       <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
         <SheetContent className="overflow-auto">
           <SheetHeader>

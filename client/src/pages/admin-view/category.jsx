@@ -20,6 +20,7 @@ import {
   postNewCategory,
 } from "@/store/admin-slice/category-slice";
 import { AdminPagination } from "@/components/common/paginate";
+import { AdminDeleteDialog } from "@/components/common/admin-delete-dialog";
 
 const initialFormdata = {
   name: "",
@@ -33,8 +34,11 @@ export const AdminCategory = () => {
   );
 
   const [isOpenSheet, setIsOpenSheet] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [isConfirmDelete, setIsConfirmDelete] = useState(false);
   const [formData, setFormData] = useState(initialFormdata);
   const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [isCateogryItemToDelete, setIsCateogryItemToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
@@ -88,16 +92,32 @@ export const AdminCategory = () => {
         });
   };
 
-  const handleDeleteCategory = (categoryId) => {
-    dispatch(deleteCategory(categoryId)).then((data) => {
-      if (data.payload.success) {
-        toast({
-          title: data.payload.message,
-        });
-        dispatch(getCategories());
-      }
-    });
-  };
+  // const handleDeleteCategory = (categoryId) => {
+  //   dispatch(deleteCategory(categoryId)).then((data) => {
+  //     if (data.payload.success) {
+  //       toast({
+  //         title: data.payload.message,
+  //       });
+  //       dispatch(getCategories());
+  //     }
+  //   });
+  // };
+
+  useEffect(() => {
+    if (isConfirmDelete) {
+      dispatch(deleteCategory(isCateogryItemToDelete._id)).then((data) => {
+        if (data.payload.success) {
+          toast({
+            title: data.payload.message,
+          });
+          dispatch(
+            getCategoriesPagination({ page: currentPage, limit: itemsPerPage })
+          );
+        }
+      });
+      setIsConfirmDelete(false);
+    }
+  }, [isConfirmDelete]);
 
   useEffect(() => {
     dispatch(
@@ -115,7 +135,8 @@ export const AdminCategory = () => {
         itemsList={categoryList}
         setCurrentEditedId={setCurrentEditedId}
         setIsOpenSheet={setIsOpenSheet}
-        handleDelete={handleDeleteCategory}
+        setIsOpenAlert={setIsOpenAlert}
+        handleDelete={setIsCateogryItemToDelete}
         handleEdit={handleEditCategory}
         totalItems={totalItems}
         currentPage={currentPage}
@@ -126,6 +147,12 @@ export const AdminCategory = () => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         itemsPerPage={itemsPerPage}
+      />
+      <AdminDeleteDialog
+        isOpenAlert={isOpenAlert}
+        setIsOpenAlert={setIsOpenAlert}
+        istemToDelete={isCateogryItemToDelete}
+        setIsConfirmDelete={setIsConfirmDelete}
       />
       <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
         <SheetContent className="overflow-auto">
