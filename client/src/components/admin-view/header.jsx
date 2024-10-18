@@ -1,4 +1,3 @@
-import { AlignJustify, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/store/auth-slice";
@@ -20,25 +19,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Home,
-  LineChart,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  ShirtIcon,
-  ShoppingCart,
-} from "lucide-react";
+import { Search } from "lucide-react";
 import { AdminSideBarSM } from "./sidebar-sm";
+import { useLocation, useNavigate } from "react-router-dom";
 export const AdminHeader = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleLogout = (event) => {
-    event.preventDefault();
+  const lastPart = location.pathname.split("/").pop();
+  const capitalized = lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
+
+  const handleLogout = () => {
     dispatch(logoutUser());
+    navigate("/auth/login");
   };
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <AdminSideBarSM />
@@ -52,12 +48,8 @@ export const AdminHeader = () => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <div>Products</div>
+              <div>{capitalized}</div>
             </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>All Products</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -95,7 +87,9 @@ export const AdminHeader = () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleLogout()}>
+            Logout
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

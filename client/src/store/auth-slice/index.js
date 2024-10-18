@@ -3,6 +3,7 @@ import {
   patchChangePassword,
   patchResetPassword,
   postAuthLogin,
+  postAuthLogout,
   postAuthRegister,
   postForgotPassword,
 } from "@/services/auth-api";
@@ -31,7 +32,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk("/user/logout", async () => {
-  const response = await postAuthLogin();
+  const response = await postAuthLogout();
   return response.data;
 });
 
