@@ -122,7 +122,7 @@ export const AdminCategory = () => {
       <AdminTable
         buttonText={"Add Category"}
         titleText={"Categories"}
-        handleOpenAdd={handleOpenAddBrand}
+        handleOpenAdd={handleOpenAddCategory}
         itemsList={categoryList}
         setCurrentEditedId={setCurrentEditedId}
         setIsOpenSheet={setIsOpenSheet}
