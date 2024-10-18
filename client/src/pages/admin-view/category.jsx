@@ -42,8 +42,10 @@ export const AdminCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
-  const handleOpenAddBrand = () => {
+  const handleOpenAddCategory = () => {
     setIsOpenSheet(true);
+    setCurrentEditedId(null)
+    setFormData(initialFormdata)
   };
 
   const handleEditCategory = (category) => {
@@ -91,17 +93,6 @@ export const AdminCategory = () => {
           }
         });
   };
-
-  // const handleDeleteCategory = (categoryId) => {
-  //   dispatch(deleteCategory(categoryId)).then((data) => {
-  //     if (data.payload.success) {
-  //       toast({
-  //         title: data.payload.message,
-  //       });
-  //       dispatch(getCategories());
-  //     }
-  //   });
-  // };
 
   useEffect(() => {
     if (isConfirmDelete) {

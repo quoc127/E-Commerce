@@ -44,6 +44,8 @@ export const AdminBrand = () => {
 
   const handleOpenAddBrand = () => {
     setIsOpenSheet(true);
+    setCurrentEditedId(null)
+    setFormData(initialFormdata)
   };
 
   const handleEditBrand = (brand) => {
