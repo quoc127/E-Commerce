@@ -6,8 +6,10 @@ import { AdminPagination } from "@/components/common/paginate";
 import { useToast } from "@/hooks/use-toast";
 import {
   deleteAdminProduct,
+  editAdminProduct,
   getAdminAllProducts,
   getAdminProductsPagination,
+  postAdminNewProduct,
 } from "@/store/admin-slice/products-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,17 +49,59 @@ export const AdminProduct = () => {
 
   const handleOpenAddProduct = () => {
     setIsOpenSheet(true);
+    setCurrentEditedId(null)
+    setFormData(initialFormdata)
   };
 
-  const handleEditProduct = (brand) => {
+  const handleEditProduct = (product) => {
     setFormData({
-      name: brand.name,
-      description: brand.description,
+      productName: product.name,
+      price: product.price,
+      description: product.description,
+      productImage: product.image,
+      totalProducts: product.total,
+      brandName: product.brandId,
+      categoryName: product.categoryId,
     });
   };
 
   const onSubmit = (event) => {
     event.preventDefault();
+    currentEditedId !== null
+      ? dispatch(editAdminProduct({ id: currentEditedId, formData })).then(
+          (data) => {
+            if (data?.payload?.success) {
+              toast({
+                title: data.payload.message,
+              });
+              setIsOpenSheet(false);
+              setFormData(initialFormdata);
+              dispatch(
+                getAdminProductsPagination({
+                  page: currentPage,
+                  limit: itemsPerPage,
+                })
+              );
+            } else {
+              toast({ title: data.payload.message, variant: "destructive" });
+            }
+          }
+        )
+      : dispatch(postAdminNewProduct(formData)).then((data) => {
+          if (data?.payload?.success) {
+            toast({ title: data.payload.message });
+            setIsOpenSheet(false);
+            setFormData(initialFormdata);
+            dispatch(
+              getAdminProductsPagination({
+                page: currentPage,
+                limit: itemsPerPage,
+              })
+            );
+          } else {
+            toast({ title: data.payload.message, variant: "destructive" });
+          }
+        });
   };
 
   useEffect(() => {
@@ -90,11 +134,13 @@ export const AdminProduct = () => {
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <AdminHeader />
         <AdminTable
+          isProduct={true}
           buttonText={"Add Product"}
           titleText={"Products"}
           handleOpenAdd={handleOpenAddProduct}
           itemsList={productsList}
           setCurrentEditedId={setCurrentEditedId}
+          setIsOpenSheet={setIsOpenSheet}
           setIsOpenAlert={setIsOpenAlert}
           handleDelete={setIsProductItemToDelete}
           handleEdit={handleEditProduct}
@@ -118,12 +164,16 @@ export const AdminProduct = () => {
         <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
           <SheetContent className="overflow-auto">
             <SheetHeader>
-              <SheetTitle>Add New Product</SheetTitle>
+              <SheetTitle>
+                {currentEditedId ? "Edit Product" : "Add New Product"}
+              </SheetTitle>
               <SheetDescription></SheetDescription>
               <AdminFormProduct
+                onSubmit={onSubmit}
                 formData={formData}
                 setFormData={setFormData}
                 setIsOpenSheet={setIsOpenSheet}
+                currentEditedId={currentEditedId}
                 initialFormdata={initialFormdata}
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}

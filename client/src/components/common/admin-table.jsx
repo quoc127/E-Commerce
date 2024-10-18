@@ -28,6 +28,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dayjs from "dayjs";
 export const AdminTable = ({
+  isProduct,
   buttonText,
   titleText,
   handleOpenAdd,
@@ -107,8 +108,12 @@ export const AdminTable = ({
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead className={isProduct ? "" : "hidden"}>Price</TableHead>
                     <TableHead>Description</TableHead>
+                    <TableHead className={isProduct ? "" : "hidden"}>Total Products</TableHead>
+                    <TableHead className={isProduct ? "" : "hidden"}>Brand Name</TableHead>
+                    <TableHead className={isProduct ? "" : "hidden"}>Category Name</TableHead>
+                    <TableHead>Status</TableHead>
                     <TableHead>Created At</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -121,11 +126,23 @@ export const AdminTable = ({
                             <TableCell className="font-medium">
                               {item.name}
                             </TableCell>
-                            <TableCell>
-                              <Badge variant="outline">{item.status}</Badge>
+                            <TableCell className={`font-medium ${isProduct ? "" : "hidden"}`}>
+                              {item.price}
                             </TableCell>
                             <TableCell className="w-2/4">
                               {item.description}
+                            </TableCell>
+                            <TableCell className={`font-medium ${isProduct ? "" : "hidden"}`}>
+                              {item.total}
+                            </TableCell>
+                            <TableCell className={`font-medium ${isProduct ? "" : "hidden"}`}>
+                              {item.brandId}
+                            </TableCell>
+                            <TableCell className={`font-medium ${isProduct ? "" : "hidden"}`}>
+                              {item.categoryId}
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline">{item.status}</Badge>
                             </TableCell>
                             <TableCell>
                               {dayjs(item.createdAt).format("HH:mm DD-MM-YYYY")}
@@ -143,7 +160,7 @@ export const AdminTable = ({
                               <Button
                                 onClick={() => {
                                   handleDelete(item);
-                                  setIsOpenAlert(true)
+                                  setIsOpenAlert(true);
                                 }}
                               >
                                 Delete

@@ -47,13 +47,32 @@ export const deleteProduct = (id) => {
   });
 };
 
-export const editProduct = (id, { name, description }) => {
+export const editProduct = (
+  id,
+  {
+    productName,
+    price,
+    description,
+    productImage,
+    totalProducts,
+    brandName,
+    categoryName,
+  }
+) => {
+  const formData = new FormData();
+  formData.append("name", productName);
+  formData.append("price", price);
+  formData.append("description", description);
+  formData.append("total", totalProducts);
+  formData.append("brandId", brandName);
+  formData.append("categoryId", categoryName);
+
+  if (productImage) {
+    formData.append("image", productImage);
+  }
   return axios.patch(
     `http://localhost:5000/api/product/edit/${id}`,
-    {
-      name: name,
-      description: description,
-    },
+    formData,
     {
       withCredentials: true,
     },

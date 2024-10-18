@@ -3,19 +3,16 @@ import { InputField } from "./input-filed";
 import { SelectField } from "./select-field";
 import { TextAreaField } from "./text-area-field";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAdminProductsPagination,
-  postAdminNewProduct,
-} from "@/store/admin-slice/products-slice";
-import { useToast } from "@/hooks/use-toast";
+import { getAdminProductsPagination } from "@/store/admin-slice/products-slice";
 import { getBrands } from "@/store/admin-slice/brands-slice";
 import { getCategories } from "@/store/admin-slice/category-slice";
 
 export const AdminFormProduct = ({
+  onSubmit,
   formData,
   setFormData,
   setIsOpenSheet,
-  initialFormdata,
+  currentEditedId,
   currentPage,
   itemsPerPage,
 }) => {
@@ -23,7 +20,6 @@ export const AdminFormProduct = ({
   const { categoryList } = useSelector((state) => state.adminCategories);
 
   const dispatch = useDispatch();
-  const { toast } = useToast();
   const [previewImage, setPreviewImage] = useState(null);
 
   const handleChangeValue = (event) => {
@@ -51,22 +47,6 @@ export const AdminFormProduct = ({
     setPreviewImage(null);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(postAdminNewProduct(formData)).then((data) => {
-      if (data?.payload?.success) {
-        toast({ title: data.payload.message });
-        setIsOpenSheet(false);
-        setFormData(initialFormdata);
-        dispatch(
-          getAdminProductsPagination({ page: currentPage, limit: itemsPerPage })
-        );
-      } else {
-        toast({ title: data.payload.message, variant: "destructive" });
-      }
-    });
-  };
-
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
@@ -82,7 +62,7 @@ export const AdminFormProduct = ({
   }, [dispatch, currentPage, itemsPerPage]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={onSubmit}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-row-12">
@@ -137,13 +117,31 @@ export const AdminFormProduct = ({
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
-                  {previewImage ? (
+                  {previewImage || currentEditedId ? (
                     <div className="relative">
-                      <img
-                        src={previewImage}
-                        alt="Preview"
-                        className="mx-auto h-48 w-48 object-cover"
-                      />
+                      <label
+                        htmlFor="file-upload"
+                        className="relative cursor-pointer"
+                      >
+                        <img
+                          src={
+                            typeof formData.productImage === "string"
+                              ? formData.productImage
+                              : previewImage
+                          }
+                          alt="Preview"
+                          className="mx-auto h-48 w-48 object-cover"
+                        />
+                        <input
+                          id="file-upload"
+                          name="file-upload"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleChangeFile}
+                          className="sr-only"
+                        />
+                      </label>
+
                       <button
                         type="button"
                         onClick={handleRemoveImage}
@@ -201,6 +199,7 @@ export const AdminFormProduct = ({
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
         <button
+        onClick={() => setIsOpenSheet(false)}
           type="button"
           className="rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
