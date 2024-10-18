@@ -3,7 +3,7 @@ const { paginate } = require("../../../utils/paginate");
 
 module.exports.addProduct = async (req, res) => {
   try {
-    const { name, price, description, total, brandId, categoryId } = req.body;
+    const { name, price, description, total, brandName, categoryName } = req.body;
     const image = req.imageUrl;
     const newProduct = new Product({
       name: name,
@@ -11,8 +11,8 @@ module.exports.addProduct = async (req, res) => {
       price: price,
       description: description,
       total: total,
-      brandId: brandId,
-      categoryId: categoryId,
+      brandName: brandName,
+      categoryName: categoryName,
     });
     await newProduct.save();
 
@@ -55,13 +55,13 @@ module.exports.getProductById = async (req, res) => {
     if (!checkProduct) {
       return res.status(404).json({
         success: false,
-        message: `Product with id: ${id} not found! Please try again.`,
+        message: `Product not found! Please try again.`,
       });
     }
 
     res.status(200).json({
       success: true,
-      message: `Get product with id: ${id} successfully.`,
+      message: `Get product successfully.`,
       data: checkProduct,
     });
   } catch (error) {
@@ -76,14 +76,14 @@ module.exports.getProductById = async (req, res) => {
 module.exports.editProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, description, total, brandId, categoryId } = req.body;
+    const { name, price, description, total, brandName, categoryName } = req.body;
     const image = req.imageUrl;
 
     const checkProduct = await Product.findOne({ _id: id, deleted: false });
     if (!checkProduct) {
       return res.status(404).json({
         success: false,
-        message: `Product with id: ${id} dose't exist! Please try again.`,
+        message: `Product does't exist! Please try again.`,
       });
     }
 
@@ -97,13 +97,13 @@ module.exports.editProduct = async (req, res) => {
         price: price,
         description: description,
         total: total,
-        brandId: brandId,
-        categoryId: categoryId,
+        brandName: brandName,
+        categoryName: categoryName,
       }
     );
     res.status(200).json({
       success: true,
-      message: `Update product with id: ${id} successfully.`,
+      message: `Update product successfully.`,
     });
   } catch (error) {
     console.log(error);
@@ -121,14 +121,14 @@ module.exports.deleteProduct = async (req, res) => {
     if (!checkProduct) {
       return res.status(404).json({
         success: false,
-        message: `Product with id: ${id} not found! Please try again.`,
+        message: `Product not found! Please try again.`,
       });
     }
     await checkProduct.updateOne({ deleted: true });
 
     res.status(200).json({
       success: true,
-      message: `Delete product with id: ${id} successfully`,
+      message: `Delete product successfully`,
     });
   } catch (error) {
     console.log(error);

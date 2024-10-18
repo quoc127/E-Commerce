@@ -14,25 +14,25 @@ const validateField = (field, value, type, res) => {
 };
 
 module.exports.AddProduct = (req, res, next) => {
-  const { name, price, brandId, categoryId } = req.body;
+  const { name, price, brandName, categoryName } = req.body;
   const priceType = parseInt(price)
 
   if (validateField("Product name", name, "string", res)) return;
   if (validateField("Price", priceType, "number", res)) return;
-  if (validateField("Brand name", brandId, "string", res)) return;
-  if (validateField("Category name", categoryId, "string", res)) return;
+  if (validateField("Brand name", brandName, "string", res)) return;
+  if (validateField("Category name", categoryName, "string", res)) return;
 
   next();
 };
 
 module.exports.EditProduct = (req, res, next) => {
-  const { name, price, brandId, categoryId } = req.body;
+  const { name, price, brandName, categoryName } = req.body;
   const priceType = parseInt(price)
 
   if (validateField("Product name", name, "string", res)) return;
   if (validateField("Price", priceType, "number", res)) return;
-  if (validateField("Brand ID", brandId, "string", res)) return;
-  if (validateField("Category ID", categoryId, "string", res)) return;
+  if (validateField("Brand ID", brandName, "string", res)) return;
+  if (validateField("Category ID", categoryName, "string", res)) return;
 
   next();
 };

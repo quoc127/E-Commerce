@@ -29,8 +29,8 @@ const ProductSchema = mongoose.Schema(
       default: false,
     },
     deletedAt: Date,
-    brandId: String,
-    categoryId: String,
+    brandName: String,
+    categoryName: String,
   },
   {
     timestamps: true,
