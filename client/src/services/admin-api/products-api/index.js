@@ -29,8 +29,8 @@ export const postAddNewProduct = ({
   formData.append("price", price);
   formData.append("description", description);
   formData.append("total", totalProducts);
-  formData.append("brandId", brandName);
-  formData.append("categoryId", categoryName);
+  formData.append("brandName", brandName);
+  formData.append("categoryName", categoryName);
 
   if (productImage) {
     formData.append("image", productImage);
@@ -64,8 +64,8 @@ export const editProduct = (
   formData.append("price", price);
   formData.append("description", description);
   formData.append("total", totalProducts);
-  formData.append("brandId", brandName);
-  formData.append("categoryId", categoryName);
+  formData.append("brandName", brandName);
+  formData.append("categoryName", categoryName);
 
   if (productImage) {
     formData.append("image", productImage);

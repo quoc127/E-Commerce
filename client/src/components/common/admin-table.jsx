@@ -136,10 +136,10 @@ export const AdminTable = ({
                               {item.total}
                             </TableCell>
                             <TableCell className={`font-medium ${isProduct ? "" : "hidden"}`}>
-                              {item.brandId}
+                              {item.brandName}
                             </TableCell>
                             <TableCell className={`font-medium ${isProduct ? "" : "hidden"}`}>
-                              {item.categoryId}
+                              {item.categoryName}
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline">{item.status}</Badge>

@@ -60,8 +60,8 @@ export const AdminProduct = () => {
       description: product.description,
       productImage: product.image,
       totalProducts: product.total,
-      brandName: product.brandId,
-      categoryName: product.categoryId,
+      brandName: product.brandName,
+      categoryName: product.categoryName,
     });
   };
 
