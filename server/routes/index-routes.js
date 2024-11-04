@@ -4,10 +4,13 @@ const categoryRoutes = require("../routes/admin/category/category-routes");
 const productRoutes = require("./admin/product/product-routes");
 const authorization = require("../middleware/check-authorization");
 
+const shopProductRoute = require("./shop/product/product-routes");
+
 module.exports = (app) => {
   // Auth User
   app.use("/api/user", authRoutes);
 
+  // Admin
   // Brand
   app.use(
     "/api/brand",
@@ -31,4 +34,8 @@ module.exports = (app) => {
     authorization.adminRole,
     productRoutes
   );
+
+  //Shop
+  // Product
+  app.use("/api/shop/product", shopProductRoute);
 };
