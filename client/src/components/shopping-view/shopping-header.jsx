@@ -47,7 +47,11 @@ const MenuItems = () => {
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center lg:flex-row gap-6 ">
       {shoppingViewHeaderMenuItems.map((menuItem, index) => {
         return (
-          <Label key={index} className="text-sm font-medium cursor-pointer">
+          <Label
+            key={index}
+            className="text-sm font-medium cursor-pointer"
+            onClick={() => handleNavigate(menuItem)}
+          >
             {menuItem.label}
           </Label>
         );
