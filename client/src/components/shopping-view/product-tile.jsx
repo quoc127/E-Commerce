@@ -8,7 +8,7 @@ export const ShoppingProductTile = ({ productItem }) => {
             <img
               alt={productItem.name}
               src={productItem.image}
-              className="w-full h-48 object-cover mb-4 rounded-md"
+              className="w-full h-48 object-cover mb-4 rounded-md cursor-pointer"
             />
           </div>
           <div className="flex flex-col justify-between flex-grow text-center">

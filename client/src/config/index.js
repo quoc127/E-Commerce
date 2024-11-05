@@ -213,19 +213,19 @@ export const shoppingViewHeaderMenuItems = [
 
 export const filterOptions = {
   Category: [
-    { id: "streetstyle", label: "Street Style" },
-    { id: "activewear", label: "Activewear" },
-    { id: "outerwear", label: "Outerwear" },
-    { id: "luxuryhandbags", label: "Luxury Handbags" },
-    { id: "accessories", label: "Accessories" },
+    { id: "Street Style", label: "Street Style" },
+    { id: "Activewear", label: "Activewear" },
+    { id: "Outerwear", label: "Outerwear" },
+    { id: "Luxury Handbags", label: "Luxury Handbags" },
+    { id: "Accessories", label: "Accessories" },
   ],
   Brand: [
-    { id: "luxethreads", label: "LuxeThreads" },
-    { id: "elegante", label: "Elegante" },
-    { id: "trendVibe", label: "TrendVibe" },
-    { id: "gucci", label: "Gucci" },
-    { id: "louisvuitton", label: "Louis Vuitton" },
-    { id: "chanel", label: "Chanel" },
+    { id: "LuxeThreads", label: "LuxeThreads" },
+    { id: "Elegante", label: "Elegante" },
+    { id: "TrendVibe", label: "TrendVibe" },
+    { id: "Gucci", label: "Gucci" },
+    { id: "Louis Vuitton", label: "Louis Vuitton" },
+    { id: "Chanel", label: "Chanel" },
   ],
 };
 

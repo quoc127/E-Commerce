@@ -4,7 +4,7 @@ import { Checkbox } from "../ui/checkbox";
 import { Separator } from "../ui/separator";
 import { Fragment } from "react";
 
-export const ProductFilter = () => {
+export const ProductFilter = ({ filters, handleFilter }) => {
   return (
     <div className="bg-background rounded-lg">
       <div className="p-4 border-b">
@@ -22,7 +22,15 @@ export const ProductFilter = () => {
                       key={index}
                       className="flex font-medium items-center gap-2"
                     >
-                      <Checkbox />
+                      <Checkbox
+                        checked={
+                          filters &&
+                          Object.keys(filters).length > 0 &&
+                          filters[keyItem] &&
+                          filters[keyItem].indexOf(option.id) > -1
+                        }
+                        onCheckedChange={() => handleFilter(keyItem, option.id)}
+                      />
                       {option.label}
                     </Label>
                   );
