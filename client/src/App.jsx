@@ -25,6 +25,7 @@ import { AuthResetPassword } from "./pages/auth/reset-password";
 import { AdminProduct } from "./pages/admin-view/product";
 import { AdminBrand } from "./pages/admin-view/brand";
 import { AdminCategory } from "./pages/admin-view/category";
+import { ProductsList } from "./pages/shopping-view/products-list";
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
   );
-  
+
   if (
     isAuthenticated &&
     (location.pathname.includes("/change-password") ||
@@ -111,6 +112,7 @@ function App() {
         >
           <Route index element={<Navigate to="/shop/home" />}></Route>
           <Route path="home" element={<ShoppingHome />}></Route>
+          <Route path="products-list" element={<ProductsList />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
         <Route
