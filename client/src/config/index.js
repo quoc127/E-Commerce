@@ -167,3 +167,46 @@ export const addProductFormControls = [
     ],
   },
 ];
+
+export const shoppingViewHeaderMenuItems = [
+  {
+    id: "home",
+    label: "Home",
+    path: "/shop/home",
+  },
+  {
+    id: "products",
+    label: "Products",
+    path: "/shop/listing",
+  },
+  {
+    id: "streetstyle",
+    label: "Street Style",
+    path: "/shop/listing",
+  },
+  {
+    id: "activewear",
+    label: "Activewear",
+    path: "/shop/listing",
+  },
+  {
+    id: "outerwear",
+    label: "Outerwear",
+    path: "/shop/listing",
+  },
+  {
+    id: "luxuryhandbags",
+    label: "Luxury Handbags",
+    path: "/shop/listing",
+  },
+  {
+    id: "accessories",
+    label: "Accessories",
+    path: "/shop/listing",
+  },
+  {
+    id: "search",
+    label: "Search",
+    path: "/shop/search",
+  },
+];
