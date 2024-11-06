@@ -20,6 +20,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
+import { useEffect } from "react";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const MenuItems = () => {
       getCurrentMenuItem.id !== "home" &&
       getCurrentMenuItem.id !== "products" &&
       getCurrentMenuItem.id !== "search"
-        ? { category: [getCurrentMenuItem.id] }
+        ? { Category: [getCurrentMenuItem.id] }
         : null;
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
 

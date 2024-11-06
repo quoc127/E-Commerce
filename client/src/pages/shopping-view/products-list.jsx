@@ -35,15 +35,13 @@ export const ProductsList = () => {
   const [sort, setSort] = useState(null);
   const [filters, setFilters] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
-  const categorySearchParam = searchParams.get("category");
+  const categorySearchParam = searchParams.get("Category");
 
   const handleSort = (value) => {
     setSort(value);
   };
 
   const handleFilter = (getSectionId, getCurrentOption) => {
-    console.log("getSectionId",getSectionId);
-    console.log("getCurrentOption",getCurrentOption);
     
     let copyFilters = { ...filters };
     const indexOfCurrentSection =
@@ -90,8 +88,6 @@ export const ProductsList = () => {
   useEffect(() => {
     dispatch(getShopAllProducts());
   }, [dispatch]);
-
-  console.log("filters", filters);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">

@@ -180,27 +180,27 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/products-list",
   },
   {
-    id: "streetstyle",
+    id: "Street Style",
     label: "Street Style",
     path: "/shop/products-list",
   },
   {
-    id: "activewear",
+    id: "Activewear",
     label: "Activewear",
     path: "/shop/products-list",
   },
   {
-    id: "outerwear",
+    id: "Outerwear",
     label: "Outerwear",
     path: "/shop/products-list",
   },
   {
-    id: "luxuryhandbags",
+    id: "Luxury Handbags",
     label: "Luxury Handbags",
     path: "/shop/products-list",
   },
   {
-    id: "accessories",
+    id: "Accessories",
     label: "Accessories",
     path: "/shop/products-list",
   },
