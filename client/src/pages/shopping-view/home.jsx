@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { ShoppingProductTile } from "@/components/shopping-view/product-tile";
 import { useDispatch, useSelector } from "react-redux";
-import { getShopAllProducts } from "@/store/shop-slice/products-slice";
+import { getShopAllNewProducts } from "@/store/shop-slice/products-slice";
 
 const banners = [BannerOne, BannerTwo, BannerThree];
 
@@ -14,7 +14,6 @@ export const ShoppingHome = () => {
   const { productList } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
   const [currentSlide, setCurrentSlide] = useState(0);
-  console.log("productList", productList);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -25,7 +24,7 @@ export const ShoppingHome = () => {
   }, [banners]);
 
   useEffect(() => {
-    dispatch(getShopAllProducts());
+    dispatch(getShopAllNewProducts());
   }, [dispatch]);
 
   return (
@@ -73,21 +72,7 @@ export const ShoppingHome = () => {
             {productList && productList.length > 0
               ? productList.map((productItem, index) => {
                   return (
-                    <div key={index} className="border">
-                      <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                        <img
-                          alt={productItem.name}
-                          src={productItem.image}
-                          className="h-full w-full object-cover object-center group-hover:opacity-75"
-                        />
-                      </div>
-                      <h3 className="mt-4 text-sm text-gray-700">
-                        {productItem.name}
-                      </h3>
-                      <p className="mt-1 text-lg font-medium text-gray-900">
-                        {productItem.price}
-                      </p>
-                    </div>
+                    <ShoppingProductTile key={index} productItem={productItem} />
                   );
                 })
               : null}

@@ -1,4 +1,5 @@
 import {
+  getAllNewProducts,
   getAllProducts,
   getFilterProducts,
 } from "@/services/shop-api/products-api";
@@ -17,10 +18,17 @@ export const getShopAllProducts = createAsyncThunk(
   }
 );
 
+export const getShopAllNewProducts = createAsyncThunk(
+  "/shop/get-all-new-products",
+  async () => {
+    const response = await getAllNewProducts();
+    return response.data;
+  }
+);
+
 export const getShopFilterProducts = createAsyncThunk(
   "/shop/get-filter-products",
   async ({ filterParams, sortParams }) => {
-    
     const response = await getFilterProducts(filterParams, sortParams);
     return response.data;
   }
@@ -40,6 +48,17 @@ const productsSlice = createSlice({
         state.productList = action.payload.data;
       })
       .addCase(getShopAllProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.productList = [];
+      })
+      .addCase(getShopAllNewProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getShopAllNewProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productList = action.payload.data;
+      })
+      .addCase(getShopAllNewProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
       })
