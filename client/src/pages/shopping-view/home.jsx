@@ -29,7 +29,7 @@ export const ShoppingHome = () => {
 
   return (
     <div className="flex flex-col p-6">
-      <div className="relative w-full h-[600px] overflow-hidden">
+      <div className="relative w-full h-[100px] overflow-hidden md:h-[300px] lg:h-[500px] object-cover">
         {banners && banners.length > 0
           ? banners.map((slide, index) => (
               <img
@@ -72,7 +72,10 @@ export const ShoppingHome = () => {
             {productList && productList.length > 0
               ? productList.map((productItem, index) => {
                   return (
-                    <ShoppingProductTile key={index} productItem={productItem} />
+                    <ShoppingProductTile
+                      key={index}
+                      productItem={productItem}
+                    />
                   );
                 })
               : null}
