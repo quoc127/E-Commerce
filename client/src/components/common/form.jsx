@@ -27,7 +27,7 @@ export const CommonForm = ({
     const file = event.target.files[0];
     setFormData((prevValues) => ({
       ...prevValues,
-      productImage: file,
+      image: file,
     }));
     setPreviewImage(URL.createObjectURL(file));
   };
@@ -35,7 +35,7 @@ export const CommonForm = ({
   const handleRemoveImage = () => {
     setFormData((prevValues) => ({
       ...prevValues,
-      productImage: null,
+      image: null,
     }));
     setPreviewImage(null);
   };
@@ -58,8 +58,8 @@ export const CommonForm = ({
                   >
                     <img
                       src={
-                        typeof formData.productImage === "string"
-                          ? formData.productImage
+                        typeof formData.image === "string"
+                          ? formData.image
                           : previewImage
                       }
                       alt="Preview"
