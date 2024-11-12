@@ -1,4 +1,5 @@
 const authRoutes = require("../routes/auth/auth-routes");
+const slideRoutes = require("../routes/admin/slide/slide-routes");
 const brandRoutes = require("../routes/admin/brand/brand-routes");
 const categoryRoutes = require("../routes/admin/category/category-routes");
 const productRoutes = require("./admin/product/product-routes");
@@ -11,6 +12,14 @@ module.exports = (app) => {
   app.use("/api/user", authRoutes);
 
   // Admin
+  // Slide
+  app.use(
+    "/api/slide",
+    authorization.verifyToken,
+    authorization.adminRole,
+    slideRoutes
+  );
+
   // Brand
   app.use(
     "/api/brand",
