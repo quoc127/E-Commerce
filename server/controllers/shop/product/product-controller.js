@@ -57,7 +57,7 @@ module.exports.getShopNewProduct = async (req, res) => {
     const currentDate = new Date();
     const thirtyDaysAgo = new Date(currentDate);
 
-    thirtyDaysAgo.setDate(currentDate.getDate() - 5);
+    thirtyDaysAgo.setDate(currentDate.getDate() - 15);
 
     const newProducts = await Product.find({
       createdAt: { $gte: thirtyDaysAgo },
@@ -119,7 +119,6 @@ module.exports.getShopProductByCategory = async (req, res) => {
 module.exports.getShopFilterProduct = async (req, res) => {
   try {
     const { Category = [], Brand = [], sortBy = "price-lowtohigh" } = req.query;
-    console.log("cate", Category);
 
     let filters = {};
     if (Category.length) {
