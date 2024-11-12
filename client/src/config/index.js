@@ -83,6 +83,30 @@ export const resetPasswordFormControls = [
   },
 ];
 
+export const addImageSlideFormControls = [
+  {
+    label: "Image",
+    name: "image",
+    componentType: "file",
+    type: "file",
+    placeholder: "Enter your image",
+  },
+  {
+    label: "Name",
+    name: "name",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter image name",
+  },
+  {
+    label: "Description",
+    name: "description",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter image description",
+  },
+];
+
 export const addBrandFormControls = [
   {
     label: "Name",

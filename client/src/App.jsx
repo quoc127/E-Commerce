@@ -26,6 +26,7 @@ import { AdminProduct } from "./pages/admin-view/product";
 import { AdminBrand } from "./pages/admin-view/brand";
 import { AdminCategory } from "./pages/admin-view/category";
 import { ProductsList } from "./pages/shopping-view/products-list";
+import { AdminSlide } from "./pages/admin-view/slide";
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -98,6 +99,7 @@ function App() {
         >
           <Route index element={<Navigate to="/admin/dashboard" />}></Route>
           <Route path="dashboard" element={<AdminDashboard />}></Route>
+          <Route path="slides" element={<AdminSlide />}></Route>
           <Route path="brands" element={<AdminBrand />}></Route>
           <Route path="category" element={<AdminCategory />}></Route>
           <Route path="products" element={<AdminProduct />}></Route>

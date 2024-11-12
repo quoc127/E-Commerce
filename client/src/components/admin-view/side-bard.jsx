@@ -1,6 +1,7 @@
 import {
   ChartBarStacked,
   Home,
+  Image,
   Package,
   Package2,
   ShoppingCart,
@@ -23,11 +24,17 @@ const adminSidebarMenuItems = [
     icon: <Home className="h-5 w-5" />,
   },
   {
-    id: "orders",
-    label: "Orders",
-    path: "/admin/orders",
-    icon: <ShoppingCart className="h-5 w-5" />,
+    id: "slides",
+    label: "Image Slides",
+    path: "/admin/slides",
+    icon: <Image className="h-5 w-5" />,
   },
+  // {
+  //   id: "orders",
+  //   label: "Orders",
+  //   path: "/admin/orders",
+  //   icon: <ShoppingCart className="h-5 w-5" />,
+  // },
   {
     id: "brands",
     label: "Brands",
