@@ -15,4 +15,13 @@ route.post(
 
 route.get("/all-image", controller.getAllImage);
 
+route.delete("/delete-image/:id", controller.deleteImage);
+
+route.patch(
+  "/edit-image/:id",
+  upload().single("image"),
+  uploadCloudMiddleware.handleImageUpload,
+  controller.editImage
+);
+
 module.exports = route;
