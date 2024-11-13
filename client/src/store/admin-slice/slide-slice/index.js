@@ -1,4 +1,4 @@
-import { getAllImage, postImage } from "@/services/admin-api/slide-api";
+import { deleteImage, editImage, getAllImage, postImage } from "@/services/admin-api/slide-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -15,12 +15,36 @@ export const getAdminAllImageSlide = createAsyncThunk(
 );
 
 export const postAdminImage = createAsyncThunk(
-  "/admin/add-product",
+  "/admin/add-image",
   async (formData, { rejectWithValue }) => {
     console.log("formData", formData);
 
     try {
       const response = await postImage(formData);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  }
+);
+
+export const deleteAdminImageSlide = createAsyncThunk(
+  "/admin/delete-image",
+  async (id) => {
+    const response = await deleteImage(id);
+    return response.data;
+  }
+);
+
+export const editAdminImageSlide= createAsyncThunk(
+  "/admin/edit-image-slide",
+  async ({ id, formData }, { rejectWithValue }) => {
+    console.log("id", id);
+    
+    try {
+      const response = await editImage(id, formData);
       return response.data;
     } catch (error) {
       if (error.response && error.response.data) {
