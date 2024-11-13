@@ -7,12 +7,14 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { ShoppingProductTile } from "@/components/shopping-view/product-tile";
 import { useDispatch, useSelector } from "react-redux";
 import { getShopAllNewProducts } from "@/store/shop-slice/products-slice";
+import { useNavigate } from "react-router-dom";
 
 const banners = [BannerOne, BannerTwo, BannerThree];
 
 export const ShoppingHome = () => {
   const { productList } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
