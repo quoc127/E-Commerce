@@ -118,16 +118,16 @@ export const AdminSlide = () => {
           Banner no more than 6 images
         </span>
       </div>
-      <div className="grid grid-cols-1 gap-y-4 md:grid-cols-1 md:items-center lg:grid-cols-3 lg:gap-y-10">
+      <div className="grid grid-cols-1 gap-y-4 md:grid-cols-1 lg:grid-cols-2 lg:gap-4 xl:grid-cols-3 ">
         {imageSlideList && imageSlideList.length > 0
           ? imageSlideList.map((slide, index) => {
               return (
-                <div key={index} className="md:w-96 md:items-center mx-6">
+                <div key={index} className="md:w-full">
                   <Card>
                     <CardHeader>
                       <CardTitle>
                         <img
-                          className="h-48 object-cover"
+                          className="h-48 object-cover md:w-full"
                           src={slide.image}
                         ></img>
                       </CardTitle>
