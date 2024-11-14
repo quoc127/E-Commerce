@@ -28,6 +28,7 @@ import { AdminCategory } from "./pages/admin-view/category";
 import { ProductsList } from "./pages/shopping-view/products-list";
 import { AdminSlide } from "./pages/admin-view/slide";
 import { ProductDetail } from "./components/shopping-view/product-detail";
+import { UserDetail } from "./components/shopping-view/user-detail";
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -117,6 +118,7 @@ function App() {
           <Route path="home" element={<ShoppingHome />}></Route>
           <Route path="products-list" element={<ProductsList />}></Route>
           <Route path="product-detail/:productId" element={<ProductDetail />}></Route>
+          <Route path="user-detail/:userId" element={<UserDetail />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
         <Route

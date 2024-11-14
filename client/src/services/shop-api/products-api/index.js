@@ -18,3 +18,9 @@ export const getFilterProducts = (filterParams, sortParams) => {
     withCredentials: true,
   });
 };
+
+export const getUser= () => {
+  return axios.get("http://localhost:5000/api/shop/user-detail", {
+    withCredentials: true,
+  });
+};
