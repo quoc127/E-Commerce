@@ -138,7 +138,7 @@ export const AdminSlide = () => {
                     <CardContent className="text-center">
                       <p>{slide.name}</p>
                     </CardContent>
-                    <CardFooter className="justify-between">
+                    <CardFooter className="gap-2">
                       <Button
                         onClick={() => {
                           setIsOpenSheet(true);
