@@ -37,9 +37,9 @@ const MenuItems = () => {
         : null;
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
 
-    location.pathname.includes("listing") && currentFilter !== null
+    location.pathname.includes("products-list") && currentFilter !== null
       ? setSearchParams(
-          new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
+          new URLSearchParams(`?Category=${getCurrentMenuItem.id}`)
         )
       : navigate(getCurrentMenuItem.path);
   };
