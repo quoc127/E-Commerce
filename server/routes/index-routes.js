@@ -16,7 +16,6 @@ module.exports = (app) => {
   app.use(
     "/api/slide",
     authorization.verifyToken,
-    authorization.adminRole,
     slideRoutes
   );
 
