@@ -20,12 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import { addImageSlideFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
-import {
-  deleteAdminImageSlide,
-  editAdminImageSlide,
-  getAdminAllImageSlide,
-  postAdminImage,
-} from "@/store/admin-slice/slide-slice";
+import { deleteCommonImageSlide, editCommonImageSlide, getCommonAllImageSlide, postCommonImage } from "@/store/common-slice/slide-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -36,7 +31,7 @@ const initialFormdata = {
 };
 
 export const AdminSlide = () => {
-  const { imageSlideList } = useSelector((state) => state.adminSlide);
+  const { imageSlideList } = useSelector((state) => state.commonSlide);
   const [isOpenSheet, setIsOpenSheet] = useState(false);
   const [formData, setFormData] = useState(initialFormdata);
   const [currentEditedId, setCurrentEditedId] = useState(null);
@@ -57,7 +52,7 @@ export const AdminSlide = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     currentEditedId !== null
-      ? dispatch(editAdminImageSlide({ id: currentEditedId, formData })).then(
+      ? dispatch(editCommonImageSlide({ id: currentEditedId, formData })).then(
           (data) => {
             if (data?.payload?.success) {
               toast({
@@ -65,17 +60,17 @@ export const AdminSlide = () => {
               });
               setIsOpenSheet(false);
               setFormData(initialFormdata);
-              dispatch(getAdminAllImageSlide());
+              dispatch(getCommonAllImageSlide());
             } else {
               toast({ title: data.payload.message, variant: "destructive" });
             }
           }
         )
-      : dispatch(postAdminImage(formData)).then((data) => {
+      : dispatch(postCommonImage(formData)).then((data) => {
           if (data?.payload?.success) {
             toast({ title: data.payload.message });
             setFormData(initialFormdata);
-            dispatch(getAdminAllImageSlide());
+            dispatch(getCommonAllImageSlide());
             setIsOpenSheet(false);
           } else {
             toast({ title: data.payload.message, variant: "destructive" });
@@ -85,12 +80,12 @@ export const AdminSlide = () => {
 
   useEffect(() => {
     if (isConfirmDelete) {
-      dispatch(deleteAdminImageSlide(isImageToDelete)).then((data) => {
+      dispatch(deleteCommonImageSlide(isImageToDelete)).then((data) => {
         if (data.payload.success) {
           toast({
             title: data.payload.message,
           });
-          dispatch(getAdminAllImageSlide());
+          dispatch(getCommonAllImageSlide());
         }
       });
       setIsConfirmDelete(false);
@@ -98,7 +93,7 @@ export const AdminSlide = () => {
   }, [isConfirmDelete]);
 
   useEffect(() => {
-    dispatch(getAdminAllImageSlide());
+    dispatch(getCommonAllImageSlide());
   }, [dispatch]);
 
   return (

@@ -1,4 +1,5 @@
-import { deleteImage, editImage, getAllImage, postImage } from "@/services/admin-api/slide-api";
+
+import { deleteImage, editImage, getAllImage, postImage } from "@/services/common-api/slide-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -6,7 +7,7 @@ const initialState = {
   imageSlideList: [],
 };
 
-export const getAdminAllImageSlide = createAsyncThunk(
+export const getCommonAllImageSlide = createAsyncThunk(
   "/admin/get-all-image",
   async () => {
     const response = await getAllImage();
@@ -14,7 +15,7 @@ export const getAdminAllImageSlide = createAsyncThunk(
   }
 );
 
-export const postAdminImage = createAsyncThunk(
+export const postCommonImage = createAsyncThunk(
   "/admin/add-image",
   async (formData, { rejectWithValue }) => {
     console.log("formData", formData);
@@ -30,7 +31,7 @@ export const postAdminImage = createAsyncThunk(
   }
 );
 
-export const deleteAdminImageSlide = createAsyncThunk(
+export const deleteCommonImageSlide = createAsyncThunk(
   "/admin/delete-image",
   async (id) => {
     const response = await deleteImage(id);
@@ -38,7 +39,7 @@ export const deleteAdminImageSlide = createAsyncThunk(
   }
 );
 
-export const editAdminImageSlide= createAsyncThunk(
+export const editCommonImageSlide= createAsyncThunk(
   "/admin/edit-image-slide",
   async ({ id, formData }, { rejectWithValue }) => {
     console.log("id", id);
@@ -60,25 +61,25 @@ const slideSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(getAdminAllImageSlide.pending, (state) => {
+      .addCase(getCommonAllImageSlide.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAdminAllImageSlide.fulfilled, (state, action) => {
+      .addCase(getCommonAllImageSlide.fulfilled, (state, action) => {
         state.isLoading = false;
         state.imageSlideList = action.payload.data;
       })
-      .addCase(getAdminAllImageSlide.rejected, (state, action) => {
+      .addCase(getCommonAllImageSlide.rejected, (state, action) => {
         state.isLoading = false;
         state.imageSlideList = [];
       })
-      .addCase(postAdminImage.pending, (state) => {
+      .addCase(postCommonImage.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(postAdminImage.fulfilled, (state, action) => {
+      .addCase(postCommonImage.fulfilled, (state, action) => {
         state.isLoading = false;
         state.imageSlideList = action.payload.data;
       })
-      .addCase(postAdminImage.rejected, (state, action) => {
+      .addCase(postCommonImage.rejected, (state, action) => {
         state.isLoading = false;
         state.imageSlideList = [];
       });

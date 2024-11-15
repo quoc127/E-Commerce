@@ -8,11 +8,13 @@ import { ShoppingProductTile } from "@/components/shopping-view/product-tile";
 import { useDispatch, useSelector } from "react-redux";
 import { getShopAllNewProducts } from "@/store/shop-slice/products-slice";
 import { useNavigate } from "react-router-dom";
+import { getCommonAllImageSlide } from "@/store/common-slice/slide-slice";
 
 const banners = [BannerOne, BannerTwo, BannerThree];
 
 export const ShoppingHome = () => {
   const { productList } = useSelector((state) => state.shopProducts);
+  const { imageSlideList } = useSelector((state) => state.commonSlide);
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -29,13 +31,18 @@ export const ShoppingHome = () => {
     dispatch(getShopAllNewProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(getCommonAllImageSlide());
+  }, [dispatch]);
+  console.log(imageSlideList);
+  
   return (
     <div className="flex flex-col p-6">
       <div className="relative w-full h-[100px] overflow-hidden md:h-[300px] lg:h-[500px] object-cover">
-        {banners && banners.length > 0
-          ? banners.map((slide, index) => (
+        {imageSlideList && imageSlideList.length > 0
+          ? imageSlideList.map((slide, index) => (
               <img
-                src={slide}
+                src={slide.image}
                 key={index}
                 className={`${
                   index === currentSlide ? "opacity-100" : "opacity-0"
