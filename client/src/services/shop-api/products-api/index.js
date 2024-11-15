@@ -12,6 +12,12 @@ export const getAllNewProducts = () => {
   });
 };
 
+export const getProductById = (id) => {
+  return axios.get(`http://localhost:5000/api/shop/product/product-detail/${id}`, {
+    withCredentials: true,
+  });
+};
+
 export const getFilterProducts = (filterParams, sortParams) => {
   const query = new URLSearchParams({ ...filterParams, sortBy: sortParams });
   return axios.get(`http://localhost:5000/api/shop/product/filter?${query}`, {

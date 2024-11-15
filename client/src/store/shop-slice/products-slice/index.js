@@ -2,6 +2,7 @@ import {
   getAllNewProducts,
   getAllProducts,
   getFilterProducts,
+  getProductById,
 } from "@/services/shop-api/products-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -22,6 +23,14 @@ export const getShopAllNewProducts = createAsyncThunk(
   "/shop/get-all-new-products",
   async () => {
     const response = await getAllNewProducts();
+    return response.data;
+  }
+);
+
+export const getShopProductById = createAsyncThunk(
+  "/shop/get-product-by-id",
+  async (id) => {
+    const response = await getProductById(id);
     return response.data;
   }
 );
@@ -59,6 +68,17 @@ const productsSlice = createSlice({
         state.productList = action.payload.data;
       })
       .addCase(getShopAllNewProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.productList = [];
+      })
+      .addCase(getShopProductById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getShopProductById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productList = action.payload.data;
+      })
+      .addCase(getShopProductById.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
       })
