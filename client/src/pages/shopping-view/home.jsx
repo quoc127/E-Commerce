@@ -34,7 +34,6 @@ export const ShoppingHome = () => {
   useEffect(() => {
     dispatch(getCommonAllImageSlide());
   }, [dispatch]);
-  console.log(imageSlideList);
   
   return (
     <div className="flex flex-col p-6">
