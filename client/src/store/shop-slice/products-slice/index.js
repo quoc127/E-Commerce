@@ -9,10 +9,19 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: false,
   productList: [],
+  productListSearch: [],
 };
 
 export const getShopAllProducts = createAsyncThunk(
   "/shop/get-all-products",
+  async () => {
+    const response = await getAllProducts();
+    return response.data;
+  }
+);
+
+export const getShopAllProductsSearch = createAsyncThunk(
+  "/shop/get-all-products-search",
   async () => {
     const response = await getAllProducts();
     return response.data;
@@ -59,6 +68,17 @@ const productsSlice = createSlice({
       .addCase(getShopAllProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
+      })
+      .addCase(getShopAllProductsSearch.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getShopAllProductsSearch.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productListSearch = action.payload.data;
+      })
+      .addCase(getShopAllProductsSearch.rejected, (state, action) => {
+        state.isLoading = false;
+        state.productListSearch = [];
       })
       .addCase(getShopAllNewProducts.pending, (state) => {
         state.isLoading = true;

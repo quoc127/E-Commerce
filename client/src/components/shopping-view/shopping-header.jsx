@@ -1,4 +1,4 @@
-import { HousePlug, LogOut, Menu, UserCog } from "lucide-react";
+import { Search, LogOut, Menu, UserCog } from "lucide-react";
 import {
   Link,
   useLocation,
@@ -20,7 +20,9 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
-import { useEffect } from "react";
+import { Input } from "../ui/input";
+import { useEffect, useState } from "react";
+import { getShopAllProductsSearch } from "@/store/shop-slice/products-slice";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -102,6 +104,32 @@ const HeaderRightContent = () => {
 };
 
 export const ShoppingHeader = () => {
+  const { productListSearch } = useSelector((state) => state.shopProducts);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]);
+  const [keyword, setKeyword] = useState("");
+
+  const handleInput = (event) => {
+    const value = event.target.value.toLowerCase();
+    setKeyword(value);
+    const result = productListSearch.filter((item) => {
+      const slug = item.slug.replaceAll("-", " ");
+      const name = item.name.toLowerCase();
+      return (
+        slug === value ||
+        slug.includes(value) ||
+        name === value ||
+        name.includes(value)
+      );
+    });
+    setSearchResults(result);
+  };
+
+  useEffect(() => {
+    dispatch(getShopAllProductsSearch());
+  }, [dispatch, keyword]);
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex px-4 items-center justify-between h-16">
@@ -122,6 +150,38 @@ export const ShoppingHeader = () => {
         </Sheet>
         <div className="hidden lg:block">
           <MenuItems />
+        </div>
+        <div className="relative flex-1 md:grow-0">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={keyword}
+            onKeyDown={(event) => {if(event.key === "Enter" && keyword && searchResults) {
+              navigate("/shop/products-list")  
+            }}}
+            onChange={(event) => handleInput(event)}
+            type="search"
+            placeholder="Search..."
+            className="w-full pl-8 md:w-[200px] lg:w-[336px]"
+          />
+          {keyword && searchResults.length > 0 && (
+            <div className="absolute z-10 mt-2 w-full max-h-[300px] overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-lg">
+              {searchResults.map((item, index) => (
+                <div key={index} className="flex flex-row m-2 pb-2 border-b-2">
+                  <img src={item.image} width="50px" className="object-cover" />
+                  <div
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm w-full"
+                    onClick={() => {
+                      navigate(`/shop/product-detail/${item._id}`);
+                      setKeyword("");
+                      setSearchResults([]);
+                    }}
+                  >
+                    {item.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="hidden lg:block">
