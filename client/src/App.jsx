@@ -14,7 +14,7 @@ import { AdminLayout } from "./components/admin-view/layout";
 import { AdminDashboard } from "./pages/admin-view/dashboard";
 import { CheckAuth } from "./components/common/check-auth";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "./components/ui/skeleton";
 import { UnauthPage } from "./pages/unauth-page";
@@ -29,13 +29,35 @@ import { ProductsList } from "./pages/shopping-view/products-list";
 import { AdminSlide } from "./pages/admin-view/slide";
 import { UserDetail } from "./components/shopping-view/user-detail";
 import { ProductDetail } from "./pages/shopping-view/product-detail";
+import { getShopAllProductsSearch } from "./store/shop-slice/products-slice";
 function App() {
+  const { productListSearch } = useSelector((state) => state.shopProducts);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
   );
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [completeSearch, setCompleteSearch] = useState(false);
+
+  const handleInput = (event) => {
+    const value = event.target.value.toLowerCase();
+    setKeyword(value);
+    const result = productListSearch.filter((item) => {
+      const slug = item.slug.replaceAll("-", " ");
+      const name = item.name.toLowerCase();
+      return (
+        slug === value ||
+        slug.includes(value) ||
+        name === value ||
+        name.includes(value)
+      );
+    });
+    setSearchResults(result);
+  };
 
   if (
     isAuthenticated &&
@@ -48,6 +70,10 @@ function App() {
       navigate("/shop/home");
     }
   }
+
+  useEffect(() => {
+    dispatch(getShopAllProductsSearch());
+  }, [dispatch, keyword]);
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -110,14 +136,33 @@ function App() {
           path="/shop"
           element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <ShoppingLayout />
+              <ShoppingLayout
+                keyword={keyword}
+                setKeyword={setKeyword}
+                searchResults={searchResults}
+                setSearchResults={setSearchResults}
+                completeSearch={completeSearch}
+                setCompleteSearch={setCompleteSearch}
+                handleInput={handleInput}
+              />
             </CheckAuth>
           }
         >
           <Route index element={<Navigate to="/shop/home" />}></Route>
           <Route path="home" element={<ShoppingHome />}></Route>
-          <Route path="products-list" element={<ProductsList />}></Route>
-          <Route path="product-detail/:productId" element={<ProductDetail />}></Route>
+          <Route
+            path="products-list"
+            element={
+              <ProductsList
+                searchResults={searchResults}
+                completeSearch={completeSearch}
+              />
+            }
+          ></Route>
+          <Route
+            path="product-detail/:productId"
+            element={<ProductDetail />}
+          ></Route>
           <Route path="user-detail/:userId" element={<UserDetail />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />

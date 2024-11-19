@@ -29,20 +29,67 @@ const createSearchParamsHelper = (filterParams) => {
   return queryParams.join("$");
 };
 
-export const ProductsList = () => {
+const keyMapping = {
+  Brand: "brandName",
+  Category: "categoryName",
+  Price: "price",
+};
+
+const applyFilters = (products, filters) => {
+  let filteredProducts = products;
+
+  for (const [key, values] of Object.entries(filters)) {
+    if (Array.isArray(values) && values.length > 0) {
+      const mappedKey = keyMapping[key] || key;
+      filteredProducts = filteredProducts.filter((product) => {
+        const productValue = product[mappedKey];
+        return productValue && values.includes(productValue);
+      });
+    }
+  }
+
+  return filteredProducts;
+};
+
+export const ProductsList = ({ searchResults, completeSearch }) => {
   const { productList } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
   const [sort, setSort] = useState(null);
   const [filters, setFilters] = useState({});
+  const [filteredSearchResults, setFilteredSearchResults] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const categorySearchParam = searchParams.get("Category");
+  console.log("filteredSearchResults", filteredSearchResults);
 
   const handleSort = (value) => {
     setSort(value);
+    let sortedResults = [...filteredSearchResults];
+
+    switch (value) {
+      case "price-lowtohigh":
+        sortedResults.sort((a, b) => a.price - b.price);
+        break;
+      case "price-hightolow":
+        sortedResults.sort((a, b) => b.price - a.price);
+        break;
+      case "title-atoz":
+        sortedResults.sort((a, b) =>
+          a.name.localeCompare(b.name, "en", { sensitivity: "base" })
+        );
+        break;
+      case "title-ztoa":
+        sortedResults.sort((a, b) =>
+          b.name.localeCompare(a.name, "en", { sensitivity: "base" })
+        );
+        break;
+      default:
+        break;
+    }
+
+    setFilteredSearchResults(sortedResults);
   };
 
   const handleFilter = (getSectionId, getCurrentOption) => {
-    
     let copyFilters = { ...filters };
     const indexOfCurrentSection =
       Object.keys(copyFilters).indexOf(getSectionId);
@@ -61,13 +108,15 @@ export const ProductsList = () => {
         copyFilters[getSectionId].splice(indexOfCurrentSection, 1);
       }
     }
-    setFilters(copyFilters)
-    sessionStorage.setItem("filters", JSON.stringify(copyFilters))
+    setFilters(copyFilters);
+    const updatedResults = applyFilters(searchResults, copyFilters);
+    setFilteredSearchResults(updatedResults);
+    sessionStorage.setItem("filters", JSON.stringify(copyFilters));
   };
 
   useEffect(() => {
     setSort("price-lowtohigh");
-    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {})
+    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, [categorySearchParam]);
 
   useEffect(() => {
@@ -76,6 +125,12 @@ export const ProductsList = () => {
       setSearchParams(new URLSearchParams(createQueryString));
     }
   }, [filters]);
+
+  useEffect(() => {
+    if (completeSearch && searchResults) {
+      setFilteredSearchResults(searchResults);
+    }
+  }, [completeSearch, searchResults]);
 
   useEffect(() => {
     if (filters !== null && sort !== null) {
@@ -96,9 +151,20 @@ export const ProductsList = () => {
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-extrabold">All Products</h2>
           <div className="flex items-center gap-3">
-            <span className="text-muted-foreground">
-              {productList.length} Products
-            </span>
+            {completeSearch ? (
+              <>
+                <span className="text-muted-foreground">
+                  {filteredSearchResults.length} Products
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="text-muted-foreground">
+                  {productList.length} Products
+                </span>
+              </>
+            )}
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -128,14 +194,51 @@ export const ProductsList = () => {
             </DropdownMenu>
           </div>
         </div>
+        {/* <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 py-5">
+          {!completeSearch ? (
+            <>
+              {productList && productList.length > 0
+                ? productList.map((productItem, index) => {
+                    return (
+                      <ShoppingProductTile
+                        key={index}
+                        productItem={productItem}
+                      />
+                    );
+                  })
+                : null}
+            </>
+          ) : (
+            <>
+              {searchResults && searchResults.length > 0
+                ? searchResults.map((productItem, index) => {
+                    return (
+                      <ShoppingProductTile
+                        key={index}
+                        productItem={productItem}
+                      />
+                    );
+                  })
+                : null}
+            </>
+          )}
+        </div> */}
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 py-5">
-          {productList && productList.length > 0
-            ? productList.map((productItem, index) => {
-                return (
-                  <ShoppingProductTile key={index} productItem={productItem} />
-                );
-              })
-            : null}
+          {completeSearch ? (
+            filteredSearchResults && filteredSearchResults.length > 0 ? (
+              filteredSearchResults.map((productItem, index) => (
+                <ShoppingProductTile key={index} productItem={productItem} />
+              ))
+            ) : (
+              <p>No products found after filtering.</p>
+            )
+          ) : productList && productList.length > 0 ? (
+            productList.map((productItem, index) => (
+              <ShoppingProductTile key={index} productItem={productItem} />
+            ))
+          ) : (
+            <p>No products available.</p>
+          )}
         </div>
       </div>
     </div>
