@@ -59,7 +59,6 @@ export const ProductsList = ({ searchResults, completeSearch }) => {
   const [filteredSearchResults, setFilteredSearchResults] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const categorySearchParam = searchParams.get("Category");
-  console.log("filteredSearchResults", filteredSearchResults);
 
   const handleSort = (value) => {
     setSort(value);
@@ -124,7 +123,7 @@ export const ProductsList = ({ searchResults, completeSearch }) => {
       const createQueryString = createSearchParamsHelper(filters);
       setSearchParams(new URLSearchParams(createQueryString));
     }
-  }, [filters]);
+  }, [filters, setSearchParams]);
 
   useEffect(() => {
     if (completeSearch && searchResults) {
@@ -194,35 +193,6 @@ export const ProductsList = ({ searchResults, completeSearch }) => {
             </DropdownMenu>
           </div>
         </div>
-        {/* <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 py-5">
-          {!completeSearch ? (
-            <>
-              {productList && productList.length > 0
-                ? productList.map((productItem, index) => {
-                    return (
-                      <ShoppingProductTile
-                        key={index}
-                        productItem={productItem}
-                      />
-                    );
-                  })
-                : null}
-            </>
-          ) : (
-            <>
-              {searchResults && searchResults.length > 0
-                ? searchResults.map((productItem, index) => {
-                    return (
-                      <ShoppingProductTile
-                        key={index}
-                        productItem={productItem}
-                      />
-                    );
-                  })
-                : null}
-            </>
-          )}
-        </div> */}
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 py-5">
           {completeSearch ? (
             filteredSearchResults && filteredSearchResults.length > 0 ? (
@@ -230,7 +200,7 @@ export const ProductsList = ({ searchResults, completeSearch }) => {
                 <ShoppingProductTile key={index} productItem={productItem} />
               ))
             ) : (
-              <p>No products found after filtering.</p>
+              <div>No products found after filtering.</div>
             )
           ) : productList && productList.length > 0 ? (
             productList.map((productItem, index) => (

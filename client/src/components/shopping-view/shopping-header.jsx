@@ -1,11 +1,11 @@
-import { Search, LogOut, Menu, UserCog } from "lucide-react";
+import { LogOut, Menu, UserCog } from "lucide-react";
 import {
   Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { shoppingViewHeaderMenuItems } from "@/config";
 import { Label } from "../ui/label";
@@ -20,10 +20,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
-import { Input } from "../ui/input";
-import { useEffect, useState } from "react";
-import { getShopAllProductsSearch } from "@/store/shop-slice/products-slice";
 import { SearchInput } from "./shopping-header/search-input";
+import { useState } from "react";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -113,8 +111,7 @@ export const ShoppingHeader = ({
   setCompleteSearch,
   handleInput,
 }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [isOpenSheet, setIsOpenSheet] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -127,7 +124,7 @@ export const ShoppingHeader = ({
               alt="Logo"
             />
           </Link>
-          <Sheet>
+          <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="lg:hidden">
                 <Menu className="h-6 w-6" />
@@ -135,6 +132,8 @@ export const ShoppingHeader = ({
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs">
+              <SheetTitle></SheetTitle>
+              <SheetDescription></SheetDescription>
               <MenuItems />
               <HeaderRightContent />
             </SheetContent>
