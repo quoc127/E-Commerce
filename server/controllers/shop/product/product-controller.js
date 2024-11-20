@@ -1,4 +1,5 @@
 const Product = require("../../../models/Product");
+const { paginate } = require("../../../utils/paginate");
 
 module.exports.getShopAllProducts = async (req, res) => {
   try {
@@ -199,6 +200,29 @@ module.exports.getShopSearchProduct = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Some error occurred",
+    });
+  }
+};
+
+module.exports.getShopPaginationProduct = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+
+    const paginateData = await paginate(Product, page, limit);
+
+    res.status(200).json({
+      success: true,
+      message: `Get products page ${page} successffuly.`,
+      totalPages: paginateData.totalPages,
+      totalItems: paginateData.totalItems,
+      data: paginateData.items,
+      currentPage: paginateData.currentPage,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured",
     });
   }
 };

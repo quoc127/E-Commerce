@@ -8,5 +8,6 @@ route.get("/new-products", controller.getShopNewProduct);
 route.get("/category", controller.getShopProductByCategory);
 route.get("/filter", controller.getShopFilterProduct);
 route.get("/search/:keyword", controller.getShopSearchProduct);
+route.get("/pagination", controller.getShopPaginationProduct);
 
 module.exports = route;
