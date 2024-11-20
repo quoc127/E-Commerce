@@ -6,11 +6,9 @@ export const SearchInput = ({
   keyword,
   setKeyword,
   searchResults,
-  setSearchResults,
   completeSearch,
   setCompleteSearch,
   handleInput,
-  setIsOpenSheet,
 }) => {
   const navigate = useNavigate();
   return (
@@ -22,7 +20,6 @@ export const SearchInput = ({
           if (event.key === "Enter" && keyword && searchResults) {
             navigate("/shop/products-list");
             setCompleteSearch(true);
-            setKeyword("");
           }
         }}
         onChange={(event) => {
@@ -47,7 +44,6 @@ export const SearchInput = ({
                 onClick={() => {
                   navigate(`/shop/product-detail/${item._id}`);
                   setKeyword("");
-                  setSearchResults([]);
                 }}
               >
                 {item.name}

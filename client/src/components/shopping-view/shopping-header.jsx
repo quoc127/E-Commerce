@@ -5,7 +5,13 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import { Button } from "../ui/button";
 import { shoppingViewHeaderMenuItems } from "@/config";
 import { Label } from "../ui/label";
@@ -106,17 +112,15 @@ export const ShoppingHeader = ({
   keyword,
   setKeyword,
   searchResults,
-  setSearchResults,
   completeSearch,
   setCompleteSearch,
   handleInput,
 }) => {
-  const [isOpenSheet, setIsOpenSheet] = useState(false)
+  const [isOpenSheet, setIsOpenSheet] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="px-4 flex flex-col lg:flex-col xl:flex-row items-center justify-between gap-4">
-        {/* Hàng đầu tiên */}
         <div className="flex items-center justify-between lg:justify-end w-full">
           <Link to="/shop/home" className="flex items-center gap-2">
             <img
@@ -146,14 +150,12 @@ export const ShoppingHeader = ({
           </div>
         </div>
 
-        {/* Hàng thứ hai */}
         <div className="flex items-center justify-between w-full xl:max-w-[400px] mb-2 xl:my-0 gap-4">
           <div className="w-full lg:max-w-[400px]">
             <SearchInput
               keyword={keyword}
               setKeyword={setKeyword}
               searchResults={searchResults}
-              setSearchResults={setSearchResults}
               completeSearch={completeSearch}
               setCompleteSearch={setCompleteSearch}
               handleInput={handleInput}

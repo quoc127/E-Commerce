@@ -29,7 +29,7 @@ import { ProductsList } from "./pages/shopping-view/products-list";
 import { AdminSlide } from "./pages/admin-view/slide";
 import { UserDetail } from "./components/shopping-view/user-detail";
 import { ProductDetail } from "./pages/shopping-view/product-detail";
-import { getShopAllProductsSearch } from "./store/shop-slice/products-slice";
+import { getShopSearchProducts } from "./store/shop-slice/products-slice";
 function App() {
   const { productListSearch } = useSelector((state) => state.shopProducts);
   const location = useLocation();
@@ -39,26 +39,12 @@ function App() {
     (state) => state.auth
   );
 
-  const [searchResults, setSearchResults] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [completeSearch, setCompleteSearch] = useState(false);
 
   const handleInput = (event) => {
     const value = event.target.value.toLowerCase();
     setKeyword(value);
-    const result = productListSearch.filter((item) => {
-      const slug = item.slug.replaceAll("-", " ");
-      const name = item.name.toLowerCase();
-      return (
-        slug === value ||
-        slug.includes(value) ||
-        name === value ||
-        name.includes(value)
-      );
-    });
-    console.log("kq", result);
-    
-    setSearchResults(result);
   };
 
   if (
@@ -74,7 +60,9 @@ function App() {
   }
 
   useEffect(() => {
-    dispatch(getShopAllProductsSearch());
+    if (keyword.trim() !== "") {
+      dispatch(getShopSearchProducts(keyword));
+    }
   }, [dispatch, keyword]);
 
   useEffect(() => {
@@ -141,8 +129,7 @@ function App() {
               <ShoppingLayout
                 keyword={keyword}
                 setKeyword={setKeyword}
-                searchResults={searchResults}
-                setSearchResults={setSearchResults}
+                searchResults={productListSearch}
                 completeSearch={completeSearch}
                 setCompleteSearch={setCompleteSearch}
                 handleInput={handleInput}
@@ -156,7 +143,7 @@ function App() {
             path="products-list"
             element={
               <ProductsList
-                searchResults={searchResults}
+                searchResults={productListSearch}
                 completeSearch={completeSearch}
               />
             }

@@ -3,6 +3,7 @@ import {
   getAllProducts,
   getFilterProducts,
   getProductById,
+  getSearchProducts,
 } from "@/services/shop-api/products-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -52,6 +53,15 @@ export const getShopFilterProducts = createAsyncThunk(
   }
 );
 
+export const getShopSearchProducts = createAsyncThunk(
+  "/shop/get-search-products",
+  async (keyword) => {
+    console.log("key", keyword);
+    const response = await getSearchProducts(keyword);
+    return response.data;
+  }
+);
+
 const productsSlice = createSlice({
   name: "shopProducts",
   reducers: {},
@@ -77,6 +87,17 @@ const productsSlice = createSlice({
         state.productListSearch = action.payload.data;
       })
       .addCase(getShopAllProductsSearch.rejected, (state, action) => {
+        state.isLoading = false;
+        state.productListSearch = [];
+      })
+      .addCase(getShopSearchProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getShopSearchProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productListSearch = action.payload.data;
+      })
+      .addCase(getShopSearchProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productListSearch = [];
       })

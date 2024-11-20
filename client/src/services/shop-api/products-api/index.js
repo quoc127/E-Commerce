@@ -13,9 +13,12 @@ export const getAllNewProducts = () => {
 };
 
 export const getProductById = (id) => {
-  return axios.get(`http://localhost:5000/api/shop/product/product-detail/${id}`, {
-    withCredentials: true,
-  });
+  return axios.get(
+    `http://localhost:5000/api/shop/product/product-detail/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
 };
 
 export const getFilterProducts = (filterParams, sortParams) => {
@@ -25,7 +28,17 @@ export const getFilterProducts = (filterParams, sortParams) => {
   });
 };
 
-export const getUser= () => {
+export const getSearchProducts = (keyword) => {
+  
+  return axios.get(
+    `http://localhost:5000/api/shop/product/search/${keyword}`,
+    {
+      withCredentials: true,
+    }
+  );
+};
+
+export const getUser = () => {
   return axios.get("http://localhost:5000/api/shop/user-detail", {
     withCredentials: true,
   });

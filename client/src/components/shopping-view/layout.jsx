@@ -6,7 +6,6 @@ export const ShoppingLayout = ({
   keyword,
   setKeyword,
   searchResults,
-  setSearchResults,
   completeSearch,
   setCompleteSearch,
   handleInput,
@@ -17,13 +16,12 @@ export const ShoppingLayout = ({
         keyword={keyword}
         setKeyword={setKeyword}
         searchResults={searchResults}
-        setSearchResults={setSearchResults}
         completeSearch={completeSearch}
         setCompleteSearch={setCompleteSearch}
         handleInput={handleInput}
       />
       <main className="flex flex-col w-full">
-        <Outlet />
+        <Outlet number={1} />
       </main>
       <ShoppingFooter />
     </div>
