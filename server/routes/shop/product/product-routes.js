@@ -7,5 +7,6 @@ route.get("/product-detail/:id", controller.getShopProductDetail);
 route.get("/new-products", controller.getShopNewProduct);
 route.get("/category", controller.getShopProductByCategory);
 route.get("/filter", controller.getShopFilterProduct);
+route.get("/search", controller.getShopSearchProduct);
 
 module.exports = route;

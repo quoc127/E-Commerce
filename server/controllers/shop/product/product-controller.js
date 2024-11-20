@@ -169,3 +169,44 @@ module.exports.getShopFilterProduct = async (req, res) => {
     });
   }
 };
+
+module.exports.getShopSearchProduct = async (req, res) => {
+  try {
+    const { keyword } = req.body;
+
+    if (!keyword || keyword.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Keyword is required",
+      });
+    }
+
+    const regex = new RegExp(keyword, "i");
+
+    const results = await Product.find({
+      $or: [
+        { name: { $regex: regex } },
+        { slug: { $regex: regex } },
+      ],
+      deleted: false, 
+    });
+
+    if (results.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: `Not found products with keyword ${keyword}`,
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      data: results,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Some error occurred",
+    });
+  }
+};
