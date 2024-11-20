@@ -56,6 +56,8 @@ function App() {
         name.includes(value)
       );
     });
+    console.log("kq", result);
+    
     setSearchResults(result);
   };
 
