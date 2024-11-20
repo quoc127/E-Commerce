@@ -172,15 +172,7 @@ module.exports.getShopFilterProduct = async (req, res) => {
 
 module.exports.getShopSearchProduct = async (req, res) => {
   try {
-    const { keyword } = req.body;
-
-    if (!keyword || keyword.trim() === "") {
-      return res.status(400).json({
-        success: false,
-        message: "Keyword is required",
-      });
-    }
-
+    const { keyword } = req.params;
     const regex = new RegExp(keyword, "i");
 
     const results = await Product.find({
