@@ -142,8 +142,11 @@ module.exports.deleteProduct = async (req, res) => {
 module.exports.getPagination = async (req, res) => {
   try {
     const { page, limit } = req.query;
+    const query = {
+      deleted: false,
+    };
 
-    const paginateData = await paginate(Product, page, limit);
+    const paginateData = await paginate(Product, page, limit, query);
 
     res.status(200).json({
       success: true,

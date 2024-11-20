@@ -174,17 +174,20 @@ module.exports.getShopFilterProduct = async (req, res) => {
 module.exports.getShopSearchProduct = async (req, res) => {
   try {
     const { keyword } = req.params;
+    const { page, limit } = req.query;
     const regex = new RegExp(keyword, "i");
 
-    const results = await Product.find({
+    const query = {
       $or: [
         { name: { $regex: regex } },
         { slug: { $regex: regex } },
       ],
-      deleted: false, 
-    });
+      deleted: false,
+    };
 
-    if (results.length === 0) {
+    const paginateData = await paginate(Product, page, limit, query);
+
+    if (paginateData.totalItems === 0) {
       return res.status(200).json({
         success: true,
         message: `Not found products with keyword ${keyword}`,
@@ -193,7 +196,10 @@ module.exports.getShopSearchProduct = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: results,
+      totalPages: paginateData.totalPages,
+      totalItems: paginateData.totalItems,
+      data: paginateData.items,
+      currentPage: paginateData.currentPage,
     });
   } catch (error) {
     console.error(error);
@@ -207,8 +213,12 @@ module.exports.getShopSearchProduct = async (req, res) => {
 module.exports.getShopPaginationProduct = async (req, res) => {
   try {
     const { page, limit } = req.query;
+    const query = {
+      deleted: false,
+    };
 
-    const paginateData = await paginate(Product, page, limit);
+
+    const paginateData = await paginate(Product, page, limit, query);
 
     res.status(200).json({
       success: true,

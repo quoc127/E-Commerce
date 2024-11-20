@@ -13,11 +13,7 @@ module.exports = (app) => {
 
   // Admin
   // Slide
-  app.use(
-    "/api/slide",
-    authorization.verifyToken,
-    slideRoutes
-  );
+  app.use("/api/slide", authorization.verifyToken, slideRoutes);
 
   // Brand
   app.use(
@@ -45,5 +41,10 @@ module.exports = (app) => {
 
   //Shop
   // Product
-  app.use("/api/shop/product", shopProductRoute);
+  app.use(
+    "/api/shop/product",
+    authorization.verifyToken,
+    authorization.userRole,
+    shopProductRoute
+  );
 };
