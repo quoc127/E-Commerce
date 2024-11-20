@@ -38,6 +38,15 @@ export const getSearchProducts = (keyword) => {
   );
 };
 
+export const getProductsPaginate = (page, limit) => {
+  return axios.get(
+    `http://localhost:5000/api/shop/product/pagination?page=${page}&limit=${limit}`,
+    {
+      withCredentials: true,
+    }
+  );
+};
+
 export const getUser = () => {
   return axios.get("http://localhost:5000/api/shop/user-detail", {
     withCredentials: true,

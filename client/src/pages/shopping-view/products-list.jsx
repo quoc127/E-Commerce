@@ -1,3 +1,4 @@
+import { AdminPagination } from "@/components/common/paginate";
 import { ProductFilter } from "@/components/shopping-view/filter";
 import { ShoppingProductTile } from "@/components/shopping-view/product-tile";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { sortOptions } from "@/config";
 import {
   getShopAllProducts,
   getShopFilterProducts,
+  getShopProductsPagination,
 } from "@/store/shop-slice/products-slice";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ArrowUpDownIcon } from "lucide-react";
@@ -52,13 +54,15 @@ const applyFilters = (products, filters) => {
 };
 
 export const ProductsList = ({ searchResults, completeSearch }) => {
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, totalPages } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
   const [sort, setSort] = useState(null);
   const [filters, setFilters] = useState({});
   const [filteredSearchResults, setFilteredSearchResults] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const categorySearchParam = searchParams.get("Category");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
   const handleSort = (value) => {
     setSort(value);
@@ -140,8 +144,10 @@ export const ProductsList = ({ searchResults, completeSearch }) => {
   }, [dispatch, sort, filters]);
 
   useEffect(() => {
-    dispatch(getShopAllProducts());
-  }, [dispatch]);
+    dispatch(
+      getShopProductsPagination({ page: currentPage, limit: itemsPerPage })
+    );
+  }, [dispatch, currentPage, itemsPerPage]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -210,6 +216,12 @@ export const ProductsList = ({ searchResults, completeSearch }) => {
             <p>No products available.</p>
           )}
         </div>
+        <AdminPagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          itemsPerPage={itemsPerPage}
+        />
       </div>
     </div>
   );

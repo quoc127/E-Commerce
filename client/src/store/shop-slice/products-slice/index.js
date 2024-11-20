@@ -3,6 +3,7 @@ import {
   getAllProducts,
   getFilterProducts,
   getProductById,
+  getProductsPaginate,
   getSearchProducts,
 } from "@/services/shop-api/products-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -11,6 +12,8 @@ const initialState = {
   isLoading: false,
   productList: [],
   productListSearch: [],
+  totalPages: 0,
+  totalItems: 0,
 };
 
 export const getShopAllProducts = createAsyncThunk(
@@ -62,6 +65,14 @@ export const getShopSearchProducts = createAsyncThunk(
   }
 );
 
+export const getShopProductsPagination = createAsyncThunk(
+  "/admin/get-products-pagination",
+  async ({ page, limit }) => {
+    const response = await getProductsPaginate(page, limit);
+    return response.data;
+  }
+);
+
 const productsSlice = createSlice({
   name: "shopProducts",
   reducers: {},
@@ -79,17 +90,6 @@ const productsSlice = createSlice({
         state.isLoading = false;
         state.productList = [];
       })
-      .addCase(getShopAllProductsSearch.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getShopAllProductsSearch.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.productListSearch = action.payload.data;
-      })
-      .addCase(getShopAllProductsSearch.rejected, (state, action) => {
-        state.isLoading = false;
-        state.productListSearch = [];
-      })
       .addCase(getShopSearchProducts.pending, (state) => {
         state.isLoading = true;
       })
@@ -100,6 +100,19 @@ const productsSlice = createSlice({
       .addCase(getShopSearchProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productListSearch = [];
+      })
+      .addCase(getShopProductsPagination.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getShopProductsPagination.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productList = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+        state.totalItems = action.payload.totalItems;
+      })
+      .addCase(getShopProductsPagination.rejected, (state, action) => {
+        state.isLoading = false;
+        state.productList = [];
       })
       .addCase(getShopAllNewProducts.pending, (state) => {
         state.isLoading = true;
