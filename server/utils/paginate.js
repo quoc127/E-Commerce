@@ -5,7 +5,7 @@
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
-    const totalItems = await model.countDocuments({ deleted: false });
+    const totalItems = await model.countDocuments(query);
     const totalPages = Math.ceil(totalItems / limit);
 
     return {
