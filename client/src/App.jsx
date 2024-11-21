@@ -31,7 +31,9 @@ import { UserDetail } from "./components/shopping-view/user-detail";
 import { ProductDetail } from "./pages/shopping-view/product-detail";
 import { getShopSearchProducts } from "./store/shop-slice/products-slice";
 function App() {
-  const { productListSearch } = useSelector((state) => state.shopProducts);
+  const { productListSearch, totalPagesSearch, totalItemsSearch } = useSelector(
+    (state) => state.shopProducts
+  );
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,6 +43,9 @@ function App() {
 
   const [keyword, setKeyword] = useState("");
   const [completeSearch, setCompleteSearch] = useState(false);
+  const [currentPageSearch, setCurrentPageSearch] = useState(1);
+  const [itemsPerPageSearch, setItemsPerPageSearch] = useState(2);
+  const [isSearch, setIsSearch] = useState(false);
 
   const handleInput = (event) => {
     const value = event.target.value.toLowerCase();
@@ -61,9 +66,16 @@ function App() {
 
   useEffect(() => {
     if (keyword.trim() !== "") {
-      dispatch(getShopSearchProducts(keyword));
+      setIsSearch(true);
+      dispatch(
+        getShopSearchProducts({
+          keyword,
+          page: currentPageSearch,
+          limit: itemsPerPageSearch,
+        })
+      );
     }
-  }, [dispatch, keyword]);
+  }, [dispatch, keyword, currentPageSearch, itemsPerPageSearch]);
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -145,6 +157,13 @@ function App() {
               <ProductsList
                 searchResults={productListSearch}
                 completeSearch={completeSearch}
+                keyword={keyword}
+                totalPagesSearch={totalPagesSearch}
+                totalItemsSearch={totalItemsSearch}
+                itemsPerPageSearch={itemsPerPageSearch}
+                currentPageSearch={currentPageSearch}
+                setCurrentPageSearch={setCurrentPageSearch}
+                isSearch={isSearch}
               />
             }
           ></Route>

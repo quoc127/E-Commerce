@@ -28,10 +28,9 @@ export const getFilterProducts = (filterParams, sortParams) => {
   });
 };
 
-export const getSearchProducts = (keyword) => {
-  
+export const getSearchProducts = (keyword, page, limit) => {
   return axios.get(
-    `http://localhost:5000/api/shop/product/search/${keyword}`,
+    `http://localhost:5000/api/shop/product/search/${keyword}?page=${page}&limit=${limit}`,
     {
       withCredentials: true,
     }

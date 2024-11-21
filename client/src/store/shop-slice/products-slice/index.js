@@ -11,9 +11,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: false,
   productList: [],
-  productListSearch: [],
   totalPages: 0,
   totalItems: 0,
+  productListSearch: [],
+  totalPagesSearch: 0,
+  totalItemsSearch: 0,
 };
 
 export const getShopAllProducts = createAsyncThunk(
@@ -58,9 +60,8 @@ export const getShopFilterProducts = createAsyncThunk(
 
 export const getShopSearchProducts = createAsyncThunk(
   "/shop/get-search-products",
-  async (keyword) => {
-    console.log("key", keyword);
-    const response = await getSearchProducts(keyword);
+  async ({ keyword, page, limit }) => {
+    const response = await getSearchProducts(keyword, page, limit);
     return response.data;
   }
 );
@@ -96,6 +97,8 @@ const productsSlice = createSlice({
       .addCase(getShopSearchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.productListSearch = action.payload.data;
+        state.totalPagesSearch = action.payload.totalPages;
+        state.totalItemsSearch = action.payload.totalItems;
       })
       .addCase(getShopSearchProducts.rejected, (state, action) => {
         state.isLoading = false;
