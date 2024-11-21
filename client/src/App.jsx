@@ -44,7 +44,7 @@ function App() {
   const [keyword, setKeyword] = useState("");
   const [completeSearch, setCompleteSearch] = useState(false);
   const [currentPageSearch, setCurrentPageSearch] = useState(1);
-  const [itemsPerPageSearch, setItemsPerPageSearch] = useState(2);
+  const [itemsPerPageSearch, setItemsPerPageSearch] = useState(8);
   const [isSearch, setIsSearch] = useState(false);
 
   const handleInput = (event) => {
@@ -74,6 +74,8 @@ function App() {
           limit: itemsPerPageSearch,
         })
       );
+    } else{
+      setIsSearch(false);
     }
   }, [dispatch, keyword, currentPageSearch, itemsPerPageSearch]);
 

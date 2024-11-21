@@ -18,8 +18,6 @@ export const getCommonAllImageSlide = createAsyncThunk(
 export const postCommonImage = createAsyncThunk(
   "/admin/add-image",
   async (formData, { rejectWithValue }) => {
-    console.log("formData", formData);
-
     try {
       const response = await postImage(formData);
       return response.data;
@@ -42,8 +40,6 @@ export const deleteCommonImageSlide = createAsyncThunk(
 export const editCommonImageSlide= createAsyncThunk(
   "/admin/edit-image-slide",
   async ({ id, formData }, { rejectWithValue }) => {
-    console.log("id", id);
-    
     try {
       const response = await editImage(id, formData);
       return response.data;
