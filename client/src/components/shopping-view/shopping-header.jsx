@@ -92,7 +92,7 @@ const HeaderRightContent = () => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() => navigate(`/shop/user-detail/${user?._id}`)}
+            onClick={() => navigate(`/shop/user-detail/${user?.id}`)}
           >
             <UserCog className="mr-2 h-4 w-4" />
             Account

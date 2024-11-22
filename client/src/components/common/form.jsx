@@ -13,6 +13,7 @@ import { useState } from "react";
 
 export const CommonForm = ({
   hideChangeAndResetPassword,
+  isUserDetail,
   formControls,
   formData,
   setFormData,
@@ -241,7 +242,11 @@ export const CommonForm = ({
           </Link>
         </span>
       </div>
-      <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
+      <Button
+        disabled={isBtnDisabled}
+        type="submit"
+        className={`mt-2 ${isUserDetail ? "w-32" : "w-full"}`}
+      >
         {buttonText || "Submit"}
       </Button>
     </form>

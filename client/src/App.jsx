@@ -27,7 +27,7 @@ import { AdminBrand } from "./pages/admin-view/brand";
 import { AdminCategory } from "./pages/admin-view/category";
 import { ProductsList } from "./pages/shopping-view/products-list";
 import { AdminSlide } from "./pages/admin-view/slide";
-import { UserDetail } from "./components/shopping-view/user-detail";
+import { UserDetail } from "./components/shopping-view/user-detail/user-detail";
 import { ProductDetail } from "./pages/shopping-view/product-detail";
 import { getShopSearchProducts } from "./store/shop-slice/products-slice";
 function App() {

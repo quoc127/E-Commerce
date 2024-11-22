@@ -11,7 +11,7 @@ export const ShoppingLayout = ({
   handleInput,
 }) => {
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col bg-white min-h-screen">
       <ShoppingHeader
         keyword={keyword}
         setKeyword={setKeyword}
@@ -20,8 +20,8 @@ export const ShoppingLayout = ({
         setCompleteSearch={setCompleteSearch}
         handleInput={handleInput}
       />
-      <main className="flex flex-col w-full">
-        <Outlet number={1} />
+      <main className="flex flex-col w-full flex-1">
+        <Outlet />
       </main>
       <ShoppingFooter />
     </div>
