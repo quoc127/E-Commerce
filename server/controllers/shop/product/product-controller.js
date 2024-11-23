@@ -58,7 +58,7 @@ module.exports.getShopNewProduct = async (req, res) => {
     const currentDate = new Date();
     const thirtyDaysAgo = new Date(currentDate);
 
-    thirtyDaysAgo.setDate(currentDate.getDate() - 15);
+    thirtyDaysAgo.setDate(currentDate.getDate() - 30);
 
     const newProducts = await Product.find({
       createdAt: { $gte: thirtyDaysAgo },
@@ -119,7 +119,20 @@ module.exports.getShopProductByCategory = async (req, res) => {
 
 module.exports.getShopFilterProduct = async (req, res) => {
   try {
-    const { Category = [], Brand = [], sortBy = "price-lowtohigh" } = req.query;
+    const {
+      Category = [],
+      Brand = [],
+      sortBy = "price-lowtohigh",
+      page,
+      limit,
+    } = req.query;
+
+    // if (Category.length === 0 && Brand.length === 0) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     data: [],
+    //   });
+    // }
 
     let filters = {};
     if (Category.length) {
@@ -155,12 +168,15 @@ module.exports.getShopFilterProduct = async (req, res) => {
         sort.price = 1;
         break;
     }
-
-    const products = await Product.find(filters).sort(sort);
-
+    
+    const products = await paginate(Product, page, limit, filters, sort);
     res.status(200).json({
-      message: true,
-      data: products,
+      success: true,
+      message: `Get products page ${page} successffuly.`,
+      totalPages: products.totalPages,
+      totalItems: products.totalItems,
+      data: products.items,
+      currentPage: products.currentPage,
     });
   } catch (error) {
     console.log(error);
@@ -178,10 +194,7 @@ module.exports.getShopSearchProduct = async (req, res) => {
     const regex = new RegExp(keyword, "i");
 
     const query = {
-      $or: [
-        { name: { $regex: regex } },
-        { slug: { $regex: regex } },
-      ],
+      $or: [{ name: { $regex: regex } }, { slug: { $regex: regex } }],
       deleted: false,
     };
 
@@ -191,7 +204,7 @@ module.exports.getShopSearchProduct = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: `Not found products with keyword ${keyword}`,
-      })
+      });
     }
 
     res.status(200).json({
@@ -217,8 +230,7 @@ module.exports.getShopPaginationProduct = async (req, res) => {
       deleted: false,
     };
 
-
-    const paginateData = await paginate(Product, page, limit, query);
+    const paginateData = await paginate(Product, page, limit, query, { price: 1 });
 
     res.status(200).json({
       success: true,
