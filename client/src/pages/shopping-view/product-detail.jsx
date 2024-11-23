@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export const ProductDetail = () => {
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productListById } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
   const { productId } = useParams();
   const [rating, setRating] = useState(0);
@@ -36,7 +36,7 @@ export const ProductDetail = () => {
                     href="#"
                     className="mr-2 text-sm font-medium text-gray-900"
                   >
-                    {productList.brandName}
+                    {productListById.brandName}
                   </a>
                   <svg
                     width="16"
@@ -56,7 +56,7 @@ export const ProductDetail = () => {
                     href="#"
                     className="mr-2 text-sm font-medium text-gray-900"
                   >
-                    {productList.categoryName}
+                    {productListById.categoryName}
                   </a>
                   <svg
                     width="16"
@@ -76,7 +76,7 @@ export const ProductDetail = () => {
                   aria-current="page"
                   className="font-medium text-gray-500 hover:text-gray-600"
                 >
-                  {productList.name}
+                  {productListById.name}
                 </a>
               </li>
             </ol>
@@ -85,8 +85,8 @@ export const ProductDetail = () => {
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
             <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden max-w-screen-md max-h-96 mx-auto border items-center">
               <img
-                alt={productList.name}
-                src={productList.image}
+                alt={productListById.name}
+                src={productListById.image}
                 className=" object-cover size-full p-4"
               />
             </div>
@@ -94,7 +94,7 @@ export const ProductDetail = () => {
               <div className="mt-4 lg:row-span-3 lg:mt-0">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xl tracking-tight text-gray-900">
-                  {productList.price}$
+                  {productListById.price}$
                 </p>
 
                 <div className="mt-6">
@@ -139,7 +139,7 @@ export const ProductDetail = () => {
             <div className="my-6">
               <div className="lg:col-span-2 lg:border-gray-200 lg:pr-8">
                 <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl py-2">
-                  {productList.name}
+                  {productListById.name}
                 </h1>
               </div>
               <div>
@@ -149,7 +149,7 @@ export const ProductDetail = () => {
 
                 <div className="space-y-6">
                   <p className="text-base text-gray-900">
-                    {productList.description}
+                    {productListById.description}
                   </p>
                 </div>
               </div>

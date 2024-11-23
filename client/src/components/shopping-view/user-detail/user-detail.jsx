@@ -25,8 +25,7 @@ export const UserDetail = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-console.log("formDataInfo",formDataInfo);
-
+  
   const onSubmit = (event) => {
     event.preventDefault();
   };

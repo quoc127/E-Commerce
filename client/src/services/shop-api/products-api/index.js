@@ -21,9 +21,9 @@ export const getProductById = (id) => {
   );
 };
 
-export const getFilterProducts = (filterParams, sortParams) => {
+export const getFilterProducts = (filterParams, sortParams, page, limit) => {
   const query = new URLSearchParams({ ...filterParams, sortBy: sortParams });
-  return axios.get(`http://localhost:5000/api/shop/product/filter?${query}`, {
+  return axios.get(`http://localhost:5000/api/shop/product/filter?${query}&page=${page}&limit=${limit}`, {
     withCredentials: true,
   });
 };

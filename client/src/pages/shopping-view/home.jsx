@@ -13,10 +13,12 @@ import { getCommonAllImageSlide } from "@/store/common-slice/slide-slice";
 const banners = [BannerOne, BannerTwo, BannerThree];
 
 export const ShoppingHome = () => {
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productListNew } = useSelector(
+    (state) => state.shopProducts
+  );
   const { imageSlideList } = useSelector((state) => state.commonSlide);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export const ShoppingHome = () => {
   useEffect(() => {
     dispatch(getCommonAllImageSlide());
   }, [dispatch]);
-  
+
   return (
     <div className="flex flex-col p-6">
       <div className="relative w-full h-[100px] overflow-hidden md:h-[300px] lg:h-[500px] object-cover">
@@ -77,8 +79,8 @@ export const ShoppingHome = () => {
         <h2 className="text-3xl font-bold text-center mb-8">New Products</h2>
         <div className="mx-auto max-w-2xl px-4 sm:px-6 sm:py-4 lg:max-w-7xl lg:px-8">
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-            {productList && productList.length > 0
-              ? productList.map((productItem, index) => {
+            {productListNew && productListNew.length > 0
+              ? productListNew.map((productItem, index) => {
                   return (
                     <ShoppingProductTile
                       key={index}

@@ -13,6 +13,11 @@ const initialState = {
   productList: [],
   totalPages: 0,
   totalItems: 0,
+  productListNew: [],
+  productListById: [],
+  productListFilter: [],
+  totalPagesFilter: 0,
+  totalItemsFilter: 0,
   productListSearch: [],
   totalPagesSearch: 0,
   totalItemsSearch: 0,
@@ -52,8 +57,8 @@ export const getShopProductById = createAsyncThunk(
 
 export const getShopFilterProducts = createAsyncThunk(
   "/shop/get-filter-products",
-  async ({ filterParams, sortParams }) => {
-    const response = await getFilterProducts(filterParams, sortParams);
+  async ({ filterParams, sortParams, page, limit }) => {
+    const response = await getFilterProducts(filterParams, sortParams, page, limit);
     return response.data;
   }
 );
@@ -76,7 +81,11 @@ export const getShopProductsPagination = createAsyncThunk(
 
 const productsSlice = createSlice({
   name: "shopProducts",
-  reducers: {},
+  reducers: {
+    clearProductListFilter(state) {
+      state.productListFilter = [];
+    },
+  },
   initialState,
   extraReducers: (builder) => {
     builder
@@ -85,11 +94,11 @@ const productsSlice = createSlice({
       })
       .addCase(getShopAllProducts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.productList = action.payload.data;
+        // state.productList = action.payload.data;
       })
       .addCase(getShopAllProducts.rejected, (state, action) => {
         state.isLoading = false;
-        state.productList = [];
+        // state.productList = [];
       })
       .addCase(getShopSearchProducts.pending, (state) => {
         state.isLoading = true;
@@ -122,35 +131,39 @@ const productsSlice = createSlice({
       })
       .addCase(getShopAllNewProducts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.productList = action.payload.data;
+        state.productListNew = action.payload.data;
       })
       .addCase(getShopAllNewProducts.rejected, (state, action) => {
         state.isLoading = false;
-        state.productList = [];
+        state.productListNew = [];
       })
       .addCase(getShopProductById.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getShopProductById.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.productList = action.payload.data;
+        state.productListById = action.payload.data;
       })
       .addCase(getShopProductById.rejected, (state, action) => {
         state.isLoading = false;
-        state.productList = [];
+        state.productListById = [];
       })
       .addCase(getShopFilterProducts.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getShopFilterProducts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.productList = action.payload.data;
+        state.productListFilter = action.payload.data;
+        state.totalPagesFilter = action.payload.totalPages;
+        state.totalItemsFilter = action.payload.totalItems;
       })
       .addCase(getShopFilterProducts.rejected, (state, action) => {
         state.isLoading = false;
-        state.productList = [];
+        state.productListFilter = [];
       });
   },
 });
+
+export const { clearProductListFilter } = productsSlice.actions;
 
 export default productsSlice.reducer;

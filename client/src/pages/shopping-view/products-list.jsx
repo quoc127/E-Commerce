@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
 import {
+  clearProductListFilter,
   getShopFilterProducts,
   getShopProductsPagination,
 } from "@/store/shop-slice/products-slice";
@@ -61,9 +62,14 @@ export const ProductsList = ({
   setCurrentPageSearch,
   isSearch,
 }) => {
-  const { productList, totalPages, totalItems } = useSelector(
-    (state) => state.shopProducts
-  );
+  const {
+    productList,
+    productListFilter,
+    totalPages,
+    totalPagesFilter,
+    totalItems,
+  } = useSelector((state) => state.shopProducts);
+  
   const dispatch = useDispatch();
   const [sort, setSort] = useState(null);
   const [filters, setFilters] = useState({});
@@ -72,6 +78,8 @@ export const ProductsList = ({
   const categorySearchParam = searchParams.get("Category");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [currentPageFilter, setCurrentPageFilter] = useState(1);
+  const [itemsPerPageFilter, setItemsPerPageFilter] = useState(8);
 
   const handleSort = (value) => {
     setSort(value);
@@ -145,19 +153,17 @@ export const ProductsList = ({
   }, [completeSearch, searchResults]);
 
   useEffect(() => {
-    if (filters !== null && sort !== null) {
+    if (
+      filters !== null &&
+      sort !== null
+    ) {
       dispatch(
-        getShopFilterProducts({ filterParams: filters, sortParams: sort })
+        getShopFilterProducts({ filterParams: filters, sortParams: sort, page: currentPageFilter, limit: itemsPerPageFilter })
       );
+    } else {
+      dispatch(clearProductListFilter());
     }
-  }, [dispatch, sort, filters]);
-
-  useEffect(() => {
-    dispatch(
-      getShopProductsPagination({ page: currentPage, limit: itemsPerPage })
-    );
-  }, [dispatch, currentPage, itemsPerPage]);
-
+  }, [dispatch, sort, filters, currentPageFilter, itemsPerPageFilter]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -170,6 +176,12 @@ export const ProductsList = ({
               <>
                 <span className="text-muted-foreground">
                   {filteredSearchResults.length} Products
+                </span>
+              </>
+            ) : productListFilter.length > 0 ? (
+              <>
+                <span className="text-muted-foreground">
+                  {productListFilter.length} Products
                 </span>
               </>
             ) : (
@@ -216,6 +228,14 @@ export const ProductsList = ({
                 <ShoppingProductTile key={index} productItem={productItem} />
               ))
             ) : (
+              <div>No products found after search.</div>
+            )
+          ) : productListFilter.length > 0 ? (
+            productListFilter && productListFilter.length > 0 ? (
+              productListFilter.map((productItem, index) => (
+                <ShoppingProductTile key={index} productItem={productItem} />
+              ))
+            ) : (
               <div>No products found after filtering.</div>
             )
           ) : productList && productList.length > 0 ? (
@@ -227,10 +247,10 @@ export const ProductsList = ({
           )}
         </div>
         <AdminPagination
-          totalPages={isSearch ? totalPagesSearch : totalPages}
-          currentPage={isSearch ? currentPageSearch : currentPage}
-          setCurrentPage={isSearch ? setCurrentPageSearch : setCurrentPage}
-          itemsPerPage={isSearch ? itemsPerPageSearch : itemsPerPage}
+          totalPages={isSearch ? totalPagesSearch : productListFilter.length > 0 ? totalPagesFilter : totalPages}
+          currentPage={isSearch ? currentPageSearch : productListFilter.length > 0 ? currentPageFilter : currentPage}
+          setCurrentPage={isSearch ? setCurrentPageSearch : productListFilter.length > 0 ? setCurrentPageFilter : setCurrentPage}
+          itemsPerPage={isSearch ? itemsPerPageSearch : productListFilter.length > 0 ? itemsPerPageFilter : itemsPerPage}
         />
       </div>
     </div>
