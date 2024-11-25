@@ -30,7 +30,7 @@ export const SearchInput = ({
         placeholder="Search..."
         className="w-full pl-8 md:w-[300px] lg:w-[336px]"
       />
-      {keyword && searchResults.length > 0 && (
+      {keyword && Array.isArray(searchResults) && searchResults.length > 0 ? (
         <div
           className={`${
             completeSearch ? "hidden" : "block"
@@ -50,6 +50,12 @@ export const SearchInput = ({
               </div>
             </div>
           ))}
+        </div>
+      ) : (
+        <div className={` ${
+          Array.isArray(searchResults) ? "hidden" : "block"
+          } m-2 pb-2 border-b-2`}>
+          Not found product
         </div>
       )}
     </div>

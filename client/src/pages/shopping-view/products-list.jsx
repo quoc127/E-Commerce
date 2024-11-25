@@ -247,10 +247,10 @@ export const ProductsList = ({
           )}
         </div>
         <AdminPagination
-          totalPages={isSearch ? totalPagesSearch : productListFilter.length > 0 ? totalPagesFilter : totalPages}
-          currentPage={isSearch ? currentPageSearch : productListFilter.length > 0 ? currentPageFilter : currentPage}
-          setCurrentPage={isSearch ? setCurrentPageSearch : productListFilter.length > 0 ? setCurrentPageFilter : setCurrentPage}
-          itemsPerPage={isSearch ? itemsPerPageSearch : productListFilter.length > 0 ? itemsPerPageFilter : itemsPerPage}
+          totalPages={isSearch && Array.isArray(searchResults) ? totalPagesSearch : productListFilter.length > 0 ? totalPagesFilter : totalPages}
+          currentPage={isSearch && Array.isArray(searchResults) ? currentPageSearch : productListFilter.length > 0 ? currentPageFilter : currentPage}
+          setCurrentPage={isSearch && Array.isArray(searchResults) ? setCurrentPageSearch : productListFilter.length > 0 ? setCurrentPageFilter : setCurrentPage}
+          itemsPerPage={isSearch && Array.isArray(searchResults) ? itemsPerPageSearch : productListFilter.length > 0 ? itemsPerPageFilter : itemsPerPage}
         />
       </div>
     </div>
