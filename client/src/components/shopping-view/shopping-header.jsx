@@ -1,4 +1,4 @@
-import { LogOut, Menu, UserCog } from "lucide-react";
+import { LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import {
   Link,
   useLocation,
@@ -28,6 +28,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
 import { SearchInput } from "./shopping-header/search-input";
 import { useState } from "react";
+import { UserCartWrapper } from "./shopping-cart/cart-wrapper";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -117,6 +118,7 @@ export const ShoppingHeader = ({
   handleInput,
 }) => {
   const [isOpenSheet, setIsOpenSheet] = useState(false);
+  const [openCartSheet, setOpenCartSheet] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -150,7 +152,7 @@ export const ShoppingHeader = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full xl:max-w-[400px] mb-2 xl:my-0 gap-4">
+        <div className="flex items-center justify-between w-full xl:max-w-[450px] mb-2 xl:my-0 gap-4">
           <div className="w-full lg:max-w-[400px]">
             <SearchInput
               keyword={keyword}
@@ -160,6 +162,33 @@ export const ShoppingHeader = ({
               setCompleteSearch={setCompleteSearch}
               handleInput={handleInput}
             />
+          </div>
+          <div>
+            <Sheet
+              open={openCartSheet}
+              onOpenChange={() => setOpenCartSheet(false)}
+            >
+              <Button
+                onClick={() => setOpenCartSheet(true)}
+                variant="outline"
+                size="icon"
+                className="relative"
+              >
+                <ShoppingCart className="w-6 h-6" />
+                <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
+                  6
+                </span>
+                <span className="sr-only">User cart</span>
+              </Button>
+              <UserCartWrapper
+                setOpenCartSheet={setOpenCartSheet}
+                // cartItems={
+                //   cartItems && cartItems.items && cartItems.items.length > 0
+                //     ? cartItems.items
+                //     : []
+                // }
+              />
+            </Sheet>
           </div>
           <div className="hidden xl:block">
             <HeaderRightContent />
