@@ -27,9 +27,6 @@ export const ShoppingProductTile = ({ productItem }) => {
     });
   };
 
-  useEffect(() => {
-    dispatch(getShopCartItem({ userId: user.id }));
-  }, [dispatch, user.id]);
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8 sm:px-6 lg:max-w-7xl lg:px-8 border">

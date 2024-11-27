@@ -97,7 +97,6 @@ export const UserDetail = () => {
   useEffect(() => {
     dispatch(getShopAddress({ userId: user.id }));
   }, [dispatch, user.id]);
-console.log(formDataAddress);
 
   return (
     <div className="flex h-auto">

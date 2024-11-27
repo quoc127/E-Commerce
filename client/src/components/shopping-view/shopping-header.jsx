@@ -27,8 +27,9 @@ import {
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
 import { SearchInput } from "./shopping-header/search-input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserCartWrapper } from "./shopping-cart/cart-wrapper";
+import { getShopCartItem } from "@/store/shop-slice/carts-slice";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -117,9 +118,15 @@ export const ShoppingHeader = ({
   setCompleteSearch,
   handleInput,
 }) => {
+  const { user } = useSelector((state) => state.auth);
   const [isOpenSheet, setIsOpenSheet] = useState(false);
   const [openCartSheet, setOpenCartSheet] = useState(false);
-  const {cartItemList} = useSelector((state) => state.shopCartItem)
+  const { cartItemList } = useSelector((state) => state.shopCartItem);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getShopCartItem({ userId: user.id }));
+  }, [dispatch, user.id]);
   
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -177,14 +184,16 @@ export const ShoppingHeader = ({
               >
                 <ShoppingCart className="w-6 h-6" />
                 <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
-                {cartItemList?.items?.length || 0}
+                  {cartItemList?.items?.length || 0}
                 </span>
                 <span className="sr-only">User cart</span>
               </Button>
               <UserCartWrapper
                 setOpenCartSheet={setOpenCartSheet}
                 cartItems={
-                  cartItemList && cartItemList.items && cartItemList.items.length > 0
+                  cartItemList &&
+                  cartItemList.items &&
+                  cartItemList.items.length > 0
                     ? cartItemList.items
                     : []
                 }
