@@ -25,7 +25,7 @@ export const  UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
         <SheetTitle>Your Cart</SheetTitle>
         <SheetDescription></SheetDescription>
       </SheetHeader>
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-4 max-h-[450px] overflow-x-auto">
         {cartItems && cartItems.length > 0
           ? cartItems.map((item, index) => <UserCartItemsContent key={index} cartItem={item} />)
           : null}

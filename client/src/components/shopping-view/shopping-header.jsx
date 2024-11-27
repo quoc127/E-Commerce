@@ -119,7 +119,8 @@ export const ShoppingHeader = ({
 }) => {
   const [isOpenSheet, setIsOpenSheet] = useState(false);
   const [openCartSheet, setOpenCartSheet] = useState(false);
-
+  const {cartItemList} = useSelector((state) => state.shopCartItem)
+  
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="px-4 flex flex-col lg:flex-col xl:flex-row items-center justify-between gap-4">
@@ -176,17 +177,17 @@ export const ShoppingHeader = ({
               >
                 <ShoppingCart className="w-6 h-6" />
                 <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
-                  6
+                {cartItemList?.items?.length || 0}
                 </span>
                 <span className="sr-only">User cart</span>
               </Button>
               <UserCartWrapper
                 setOpenCartSheet={setOpenCartSheet}
-                // cartItems={
-                //   cartItems && cartItems.items && cartItems.items.length > 0
-                //     ? cartItems.items
-                //     : []
-                // }
+                cartItems={
+                  cartItemList && cartItemList.items && cartItemList.items.length > 0
+                    ? cartItemList.items
+                    : []
+                }
               />
             </Sheet>
           </div>

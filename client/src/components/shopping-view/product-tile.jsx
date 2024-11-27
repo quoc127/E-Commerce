@@ -1,8 +1,35 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getShopCartItem,
+  postShopCartItem,
+} from "@/store/shop-slice/carts-slice";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
-export const ShoppingProductTile = ({ productItem, handleNavigate }) => {
+export const ShoppingProductTile = ({ productItem }) => {
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  const handleAddToCart = (productId) => {
+    dispatch(
+      postShopCartItem({ userId: user.id, productId: productId, quantity: 1 })
+    ).then((data) => {
+      if (data.payload.success) {
+        dispatch(getShopCartItem({ userId: user.id }));
+        toast({
+          title: "Product is added to cart",
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    dispatch(getShopCartItem({ userId: user.id }));
+  }, [dispatch, user.id]);
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8 sm:px-6 lg:max-w-7xl lg:px-8 border">
@@ -31,7 +58,9 @@ export const ShoppingProductTile = ({ productItem, handleNavigate }) => {
       </div>
 
       <div className="flex flex-col mt-4">
-        <Button>Add to cart</Button>
+        <Button onClick={() => handleAddToCart(productItem._id)}>
+          Add to cart
+        </Button>
       </div>
     </div>
   );
