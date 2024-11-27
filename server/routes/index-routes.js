@@ -7,6 +7,7 @@ const authorization = require("../middleware/check-authorization");
 
 const shopProductRoute = require("./shop/product/product-routes");
 const shopCartRoute = require("./shop/cart/cart-routes");
+const shopAddressRoute = require("./shop/address/address-routes");
 
 module.exports = (app) => {
   // Auth User
@@ -55,5 +56,13 @@ module.exports = (app) => {
     authorization.verifyToken,
     authorization.userRole,
     shopCartRoute
+  );
+
+   // Address
+   app.use(
+    "/api/shop/address",
+    authorization.verifyToken,
+    authorization.userRole,
+    shopAddressRoute
   );
 };
