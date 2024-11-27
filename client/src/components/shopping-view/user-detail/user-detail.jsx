@@ -1,10 +1,8 @@
-import { CommonForm } from "@/components/common/form";
 import {
-  UserDetailAddress,
-  UserDetailChangePassword,
-  UserDetailInfo,
+  UserDetailTabConfig,
 } from "@/config/shop-user-detail";
 import { useToast } from "@/hooks/use-toast";
+import { changePasswordUser } from "@/store/auth-slice";
 import {
   getShopAddress,
   patchShopAddress,
@@ -12,11 +10,11 @@ import {
 } from "@/store/shop-slice/address-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { UserDetailTab } from "./user-detail-tab";
 
 const initialFormdataChangePassword = {
-  currentPassword: "",
-  newPassword: "",
-  confirmPassword: "",
+  email: "",
+  password: "",
 };
 
 const initialFormDataAddress = {
@@ -64,6 +62,7 @@ export const UserDetail = () => {
         })
       ).then((data) => {
         if (data.payload.success) {
+          dispatch(getShopAddress({ userId: user.id }));
           toast({
             title: "Address updated successfully",
           });
@@ -74,6 +73,7 @@ export const UserDetail = () => {
         (data) => {
           if (data.payload.success) {
             setFormDataAddress(initialFormDataAddress);
+            dispatch(getShopAddress({ userId: user.id }));
             toast({
               title: "Address added successfully",
             });
@@ -81,6 +81,15 @@ export const UserDetail = () => {
         }
       );
     }
+  };
+
+  const onSubmitChangePassword = (event) => {
+    event.preventDefault();
+    dispatch(changePasswordUser(formDataChangePassword)).then((data) => {
+      if (data.payload.success) {
+        toast({ title: data.payload.message });
+      }
+    });
   };
 
   useEffect(() => {
@@ -99,77 +108,44 @@ export const UserDetail = () => {
   }, [dispatch, user.id]);
 
   return (
-    <div className="flex h-auto">
-      <div className="w-1/4 bg-gray-100 p-4">
+    <div className="flex min-h-[300px]">
+      <div className="min-w-80 bg-gray-100 p-4">
         <ul className="space-y-4">
-          <li
-            className={`cursor-pointer p-2 rounded ${
-              activeTab === "accountInfo" ? "bg-blue-500 text-white" : ""
-            }`}
-            onClick={() => handleTabChange("accountInfo")}
-          >
-            Account Info
-          </li>
-          <li
-            className={`cursor-pointer p-2 rounded ${
-              activeTab === "changePassword" ? "bg-blue-500 text-white" : ""
-            }`}
-            onClick={() => handleTabChange("changePassword")}
-          >
-            Change Password
-          </li>
+          {UserDetailTabConfig && UserDetailTabConfig.length > 0
+            ? UserDetailTabConfig.map((item, index) => {
+                return (
+                  <li
+                    key={index}
+                    className={`cursor-pointer p-2 rounded ${
+                      activeTab === item.tab
+                        ? "bg-blue-500 text-white"
+                        : ""
+                    }`}
+                    onClick={() => handleTabChange(item.tab)}
+                  >
+                    {item.label}
+                  </li>
+                );
+              })
+            : ""}
         </ul>
       </div>
 
-      <div className="w-full p-4">
-        {activeTab === "accountInfo" && (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="max-w-[500px]">
-              <h2 className="text-xl font-bold mb-4">Account Info</h2>
-              <CommonForm
-                hideChangeAndResetPassword={true}
-                isUserDetail={true}
-                formControls={UserDetailInfo}
-                formData={formDataInfo}
-                setFormData={setFormDataInfo}
-                buttonText={"Save Change"}
-                onSubmit={onSubmit}
-                isBtnDisabled={false}
-              />
-            </div>
-            <div className="max-w-[500px]">
-              <h2 className="text-xl font-bold mb-4">Account Address</h2>
-              <CommonForm
-                hideChangeAndResetPassword={true}
-                isUserDetail={true}
-                formControls={UserDetailAddress}
-                formData={formDataAddress}
-                setFormData={setFormDataAddress}
-                buttonText={
-                  addressList.length > 0 ? "Save Change" : "Add Address"
-                }
-                onSubmit={onSubmitAddress}
-                isBtnDisabled={false}
-              />
-            </div>
-          </div>
-        )}
-
-        {activeTab === "changePassword" && (
-          <div>
-            <h2 className="text-xl font-bold mb-4">Change Password</h2>
-            <CommonForm
-              hideChangeAndResetPassword={true}
-              isUserDetail={true}
-              formControls={UserDetailChangePassword}
-              formData={formDataChangePassword}
-              setFormData={setFormDataChangePassword}
-              buttonText={"Save Change"}
-              onSubmit={onSubmit}
-              isBtnDisabled={false}
-            />
-          </div>
-        )}
+      <div
+        className={`${activeTab === "accountInfo" ? "w-full" : "w-1/3 "} p-4`}
+      >
+        <UserDetailTab
+          activeTab={activeTab}
+          formDataInfo={formDataInfo}
+          setFormDataInfo={setFormDataInfo}
+          onSubmit={onSubmit}
+          formDataAddress={formDataAddress}
+          setFormDataAddress={setFormDataAddress}
+          onSubmitAddress={onSubmitAddress}
+          formDataChangePassword={formDataChangePassword}
+          setFormDataChangePassword={setFormDataChangePassword}
+          onSubmitChangePassword={onSubmitChangePassword}
+        />
       </div>
     </div>
   );

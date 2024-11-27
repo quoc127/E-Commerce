@@ -17,22 +17,16 @@ export const UserDetailInfo = [
 
 export const UserDetailChangePassword = [
   {
-    name: "currentPassword",
-    label: "Current Password",
-    placeholder: "Enter your current password",
+    name: "email",
+    label: "Email",
+    placeholder: "Enter your email",
     componentType: "input",
-    type: "password",
+    type: "email",
   },
   {
-    name: "newPassword",
-    label: "New Password",
+    name: "password",
+    label: "Password",
     placeholder: "Enter your new password",
-    componentType: "input",
-    type: "password",
-  },{
-    name: "confirmPassword",
-    label: "Confirm Password",
-    placeholder: "Enter your comfirm password",
     componentType: "input",
     type: "password",
   },
@@ -66,5 +60,18 @@ export const UserDetailAddress = [
     placeholder: "Enter your Phone Number",
     componentType: "input",
     type: "number",
+  },
+];
+
+export const UserDetailTabConfig = [
+  {
+    name: "accountInfo",
+    label: "Account Info",
+    tab: "accountInfo"
+  },
+  {
+    name: "changePassword",
+    label: "Change Password",
+    tab: "changePassword"
   },
 ];
