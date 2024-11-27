@@ -63,7 +63,6 @@ module.exports.getCartItems = async (req, res) => {
       path: "items.productId",
       select: "name image price",
     });
-    console.log(cart);
 
     const validItems = cart.items.filter(
       (productItem) => productItem.productId
