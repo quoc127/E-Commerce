@@ -64,6 +64,15 @@ module.exports.getCartItems = async (req, res) => {
       select: "name image price",
     });
 
+    if (!cart) {
+      return res.status(200).json({
+        success: true,
+        data: {
+          items: [],
+        },
+      });
+    }
+
     const validItems = cart.items.filter(
       (productItem) => productItem.productId
     );
@@ -172,15 +181,17 @@ module.exports.deleteCartItems = async (req, res) => {
       path: "items.productId",
       select: "name image price",
     });
-    
+
     if (!cart) {
       return res.status(404).json({
         success: false,
         message: "Cart not found!",
       });
     }
-    
-    cart.items = cart.items.filter((item) => item.productId._id.toString() !== productId);
+
+    cart.items = cart.items.filter(
+      (item) => item.productId._id.toString() !== productId
+    );
     await cart.save();
     await cart.populate({
       path: "items.productId",
