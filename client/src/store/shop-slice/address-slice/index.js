@@ -14,6 +14,8 @@ const initialState = {
 export const postShopAddress = createAsyncThunk(
   "shop/add-address",
   async (formData, { rejectWithValue }) => {
+    console.log("formdata", formData);
+    
     try {
       const response = await postAddress(formData);
       return response.data;
@@ -43,8 +45,8 @@ export const patchShopAddress = createAsyncThunk(
 
 export const deleteShopAddress = createAsyncThunk(
   "shop/delete-address",
-  async ({ userId, productId }) => {
-    const response = await deleteAddress(userId, productId);
+  async ({ userId, addressId }) => {
+    const response = await deleteAddress(userId, addressId);
     return response.data;
   }
 );

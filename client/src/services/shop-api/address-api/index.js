@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const postAddress = (formData) => {
+  console.log("formData", formData);
   
   return axios.post(
     "http://localhost:5000/api/shop/address/add",
@@ -29,7 +30,7 @@ export const patchAddress = (userId, addressId, formData) => {
 
 export const deleteAddress  = (userId, addressId) => {
   return axios.delete(
-    `http://localhost:5000/api/shop/address/delete//${userId}/${addressId}`,
+    `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`,
     {
       withCredentials: true,
     }

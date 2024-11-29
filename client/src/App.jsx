@@ -30,6 +30,7 @@ import { AdminSlide } from "./pages/admin-view/slide";
 import { UserDetail } from "./components/shopping-view/user-detail/user-detail";
 import { ProductDetail } from "./pages/shopping-view/product-detail";
 import { getShopSearchProducts } from "./store/shop-slice/products-slice";
+import { ShoppingCheckout } from "./pages/shopping-view/checkout";
 function App() {
   const { productListSearch, totalPagesSearch, totalItemsSearch } = useSelector(
     (state) => state.shopProducts
@@ -74,7 +75,7 @@ function App() {
           limit: itemsPerPageSearch,
         })
       );
-    } else{
+    } else {
       setIsSearch(false);
     }
   }, [dispatch, keyword, currentPageSearch, itemsPerPageSearch]);
@@ -174,6 +175,7 @@ function App() {
             element={<ProductDetail />}
           ></Route>
           <Route path="user-detail/:userId" element={<UserDetail />}></Route>
+          <Route path="checkout" element={<ShoppingCheckout />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
         <Route
