@@ -1,12 +1,19 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserCartItemsContent } from "../../components/shopping-view/shopping-cart/cart-items-content";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Address from "@/components/shopping-view/shopping-address/address";
+import { toast } from "@/hooks/use-toast";
+import { createShopOrder } from "@/store/shop-slice/order-slice";
 
 export const ShoppingCheckout = () => {
+  const { user } = useSelector((state) => state.auth);
   const { cartItemList } = useSelector((state) => state.shopCartItem);
+  const { approvalURL } = useSelector((state) => state.shopOrder);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  const [isPaymentStart, setIsPaymemntStart] = useState(false);
+  const dispatch = useDispatch();
+
   const totalCartAmount =
     cartItemList && cartItemList.items && cartItemList.items.length > 0
       ? cartItemList.items.reduce(
@@ -20,7 +27,65 @@ export const ShoppingCheckout = () => {
         )
       : 0;
 
-  const handleInitiatePaypalPayment = () => {};
+  const handleInitiatePaypalPayment = () => {
+    if (cartItemList.items.length === 0) {
+      toast({
+        title: "Your cart is empty. Please add items to proceed",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (currentSelectedAddress === null) {
+      toast({
+        title: "Please select one address to proceed.",
+        variant: "destructive",
+      });
+
+      return;
+    }
+
+    const orderData = {
+      userId: user.id,
+      cartId: cartItemList._id,
+      cartItems: cartItemList.items.map((item) => ({
+        productId: item.productId,
+        name: item.name,
+        image: item.image,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      addressInfo: {
+        addressId: currentSelectedAddress._id,
+        country: currentSelectedAddress.country,
+        city: currentSelectedAddress.city,
+        address: currentSelectedAddress.address,
+        phoneNumber: currentSelectedAddress.phoneNumber,
+      },
+      orderStatus: "pending",
+      paymentMethod: "paypal",
+      paymentStatus: "pending",
+      totalAmount: totalCartAmount,
+      orderDate: new Date(),
+      orderUpdateDate: new Date(),
+      paymentId: "",
+      payerId: "",
+    };
+
+    dispatch(createShopOrder(orderData)).then((data) => {
+      if (data.payload.success) {
+        setIsPaymemntStart(true);
+      } else {
+        setIsPaymemntStart(false);
+      }
+    });
+  };
+
+  if (approvalURL) {
+    window.location.href = approvalURL;
+  }
+
+  
 
   return (
     <div className="flex flex-col">

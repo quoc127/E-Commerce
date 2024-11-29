@@ -31,6 +31,9 @@ import { UserDetail } from "./components/shopping-view/user-detail/user-detail";
 import { ProductDetail } from "./pages/shopping-view/product-detail";
 import { getShopSearchProducts } from "./store/shop-slice/products-slice";
 import { ShoppingCheckout } from "./pages/shopping-view/checkout";
+import { PaypalReturnPage } from "./pages/shopping-view/paypal-return";
+import { PaymentSuccessPage } from "./pages/shopping-view/payment-success";
+import { ShoppingAccountOrder } from "./pages/shopping-view/account-order";
 function App() {
   const { productListSearch, totalPagesSearch, totalItemsSearch } = useSelector(
     (state) => state.shopProducts
@@ -176,6 +179,9 @@ function App() {
           ></Route>
           <Route path="user-detail/:userId" element={<UserDetail />}></Route>
           <Route path="checkout" element={<ShoppingCheckout />}></Route>
+          <Route path="paypal-return" element={<PaypalReturnPage />}></Route>
+          <Route path="payment-success" element={<PaymentSuccessPage />}></Route>
+          <Route path="account-order" element={<ShoppingAccountOrder />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
         <Route
