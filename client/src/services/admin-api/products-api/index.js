@@ -1,8 +1,13 @@
+import { getToken } from "@/helper/get-token";
 import axios from "axios";
+const token = getToken();
 
 export const getAllProducts = () => {
   return axios.get("http://localhost:5000/api/product/all-product", {
     withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
@@ -11,6 +16,9 @@ export const getProductsPaginate = (page, limit) => {
     `http://localhost:5000/api/product/pagination?page=${page}&limit=${limit}`,
     {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 };
@@ -38,12 +46,18 @@ export const postAddNewProduct = ({
 
   return axios.post("http://localhost:5000/api/product/add-product", formData, {
     withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
 export const deleteProduct = (id) => {
   return axios.delete(`http://localhost:5000/api/product/delete/${id}`, {
     withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
@@ -70,16 +84,10 @@ export const editProduct = (
   if (productImage) {
     formData.append("image", productImage);
   }
-  return axios.patch(
-    `http://localhost:5000/api/product/edit/${id}`,
-    formData,
-    {
-      withCredentials: true,
+  return axios.patch(`http://localhost:5000/api/product/edit/${id}`, formData, {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  });
 };

@@ -38,9 +38,6 @@ export const ShoppingOrders = () => {
     if (orderDetail !== null) setOpenDetailsDialog(true);
   }, [orderDetail]);
 
-  console.log("orderDetails", orderDetail);
-  
-
   return (
     <Card>
       <CardHeader>

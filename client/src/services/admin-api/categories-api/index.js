@@ -1,15 +1,26 @@
+import { getToken } from "@/helper/get-token";
 import axios from "axios";
+const token = getToken(); 
 
 export const getAllCategories = () => {
   return axios.get("http://localhost:5000/api/category/all-category", {
     withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
 export const getCategoriesPaginate = (page, limit) => {
-  return axios.get(`http://localhost:5000/api/category/pagination?page=${page}&limit=${limit}`, {
-    withCredentials: true,
-  });
+  return axios.get(
+    `http://localhost:5000/api/category/pagination?page=${page}&limit=${limit}`,
+    {
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 };
 
 export const postAddNewCategory = ({ name, description }) => {
@@ -21,6 +32,9 @@ export const postAddNewCategory = ({ name, description }) => {
     },
     {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 };
@@ -28,6 +42,9 @@ export const postAddNewCategory = ({ name, description }) => {
 export const deleteAdminCategory = (id) => {
   return axios.delete(`http://localhost:5000/api/category/delete/${id}`, {
     withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
@@ -40,10 +57,8 @@ export const editAdminCategory = (id, { name, description }) => {
     },
     {
       withCredentials: true,
-    },
-    {
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     }
   );

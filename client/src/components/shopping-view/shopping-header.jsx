@@ -1,4 +1,10 @@
-import { LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
+import {
+  LogOut,
+  Menu,
+  ShoppingBasket,
+  ShoppingCart,
+  UserCog,
+} from "lucide-react";
 import {
   Link,
   useLocation,
@@ -99,6 +105,13 @@ const HeaderRightContent = () => {
             <UserCog className="mr-2 h-4 w-4" />
             Account
           </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => navigate(`/shop/account-order`)}
+          >
+            <ShoppingBasket className="mr-2 h-4 w-4" />
+            Order
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
@@ -127,7 +140,7 @@ export const ShoppingHeader = ({
   useEffect(() => {
     dispatch(getShopCartItem({ userId: user.id }));
   }, [dispatch, user.id]);
-  
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="px-4 flex flex-col lg:flex-col xl:flex-row items-center justify-between gap-4">

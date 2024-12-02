@@ -1,19 +1,26 @@
+import { getToken } from "@/helper/get-token";
 import axios from "axios";
+const token = getToken();
 
 export const getAllBrands = () => {
-  // const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1];
   return axios.get("http://localhost:5000/api/brand/all-brand", {
     withCredentials: true,
-    // headers: {
-    //   Authorization: `Bearer ${token}`,
-    // },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
 export const getBrandsPaginate = (page, limit) => {
-  return axios.get(`http://localhost:5000/api/brand/pagination?page=${page}&limit=${limit}`, {
-    withCredentials: true,
-  });
+  return axios.get(
+    `http://localhost:5000/api/brand/pagination?page=${page}&limit=${limit}`,
+    {
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 };
 
 export const postAddNewBrands = (name, description) => {
@@ -25,6 +32,9 @@ export const postAddNewBrands = (name, description) => {
     },
     {
       withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 };
@@ -32,6 +42,9 @@ export const postAddNewBrands = (name, description) => {
 export const deleteAdminBrand = (id) => {
   return axios.delete(`http://localhost:5000/api/brand/delete/${id}`, {
     withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
@@ -42,13 +55,11 @@ export const editAdminBrand = (id, { name, description }) => {
       name: name,
       description: description,
     },
-     {
-      withCredentials: true,
-    },
     {
+      withCredentials: true,
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
