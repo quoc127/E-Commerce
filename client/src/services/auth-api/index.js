@@ -30,9 +30,8 @@ export const postAuthLogin = (email, password) => {
 export const postAuthLogout = () => {
   return axios.post(
     "http://localhost:5000/api/user/logout",
-    {
-      withCredentials: true,
-    }
+    {},
+    { withCredentials: true }
   );
 };
 
