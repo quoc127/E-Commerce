@@ -31,6 +31,7 @@ const ProductSchema = mongoose.Schema(
     deletedAt: Date,
     brandName: String,
     categoryName: String,
+    averageReview: Number,
   },
   {
     timestamps: true,

@@ -9,6 +9,7 @@ const shopProductRoute = require("./shop/product/product-routes");
 const shopCartRoute = require("./shop/cart/cart-routes");
 const shopAddressRoute = require("./shop/address/address-routes");
 const shopOrderRoute = require("./shop/order/order-routes");
+const shopProductReviewRoute = require("./shop/product-review/product-review-routes");
 
 module.exports = (app) => {
   // Auth User
@@ -74,4 +75,12 @@ module.exports = (app) => {
     authorization.userRole,
     shopOrderRoute
   );
+
+     // Product Review
+     app.use(
+      "/api/shop/product-review",
+      authorization.verifyToken,
+      authorization.userRole,
+      shopProductReviewRoute
+    );
 };
