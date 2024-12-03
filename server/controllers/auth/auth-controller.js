@@ -92,8 +92,8 @@ module.exports.login = async (req, res) => {
       }
     );
     res
-      .cookie("token", token, { httpOnly: true, secure: true })
-      .cookie("refreshToken", refreshToken, { httpOnly: true, secure: true })
+      .cookie("token", token)
+      .cookie("refreshToken", refreshToken)
       .status(200)
       .json({
         success: true,

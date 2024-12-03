@@ -6,11 +6,12 @@ module.exports.postReview = async (req, res) => {
   try {
     const { userId, productId, userName, reviewMessage, reviewValue } =
       req.body;
-
+      
     const order = await Order.findOne({
       userId: userId,
       "cartItems.productId": productId,
-    });
+    });    
+
     if (!order) {
       return res.status(403).json({
         success: false,
@@ -53,7 +54,7 @@ module.exports.postReview = async (req, res) => {
       data: newReview,
     });
   } catch (error) {
-    console.log(e);
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Error",
@@ -80,7 +81,7 @@ module.exports.getReview = async (req, res) => {
       data: reviews,
     });
   } catch (error) {
-    console.log(e);
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Error",
