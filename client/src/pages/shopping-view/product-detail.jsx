@@ -2,6 +2,7 @@ import { OptionSelector } from "@/components/shopping-view/product-detail/produc
 import { ShowReview } from "@/components/shopping-view/product-detail/show-review";
 import { StarRating } from "@/components/shopping-view/product-detail/star-icon";
 import { ChooseColor, ChooseSize } from "@/config/product-detail";
+import { getShopProductReview } from "@/store/shop-slice/product-review-slice";
 import { getShopProductById } from "@/store/shop-slice/products-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +10,7 @@ import { useParams } from "react-router-dom";
 
 export const ProductDetail = () => {
   const { productListById } = useSelector((state) => state.shopProducts);
+  const { reviews } = useSelector((state) => state.shopProductReview);
   const dispatch = useDispatch();
   const { productId } = useParams();
   const [rating, setRating] = useState(0);
@@ -21,6 +23,10 @@ export const ProductDetail = () => {
     dispatch(getShopProductById(productId));
   }, [dispatch, productId]);
 
+  useEffect(() => {
+    dispatch(getShopProductReview(productId));
+  }, [dispatch, productId]);
+  
   return (
     <div>
       <div className="bg-white">
@@ -101,7 +107,7 @@ export const ProductDetail = () => {
                   <h3 className="sr-only">Reviews</h3>
                   <div>
                     <StarRating
-                      rating={4}
+                      rating={productListById.averageReview}
                       handleRatingChange={handleRatingChange}
                     />
                   </div>
@@ -183,7 +189,7 @@ export const ProductDetail = () => {
                 </div>
               </div>
             </div>
-            <ShowReview />
+            <ShowReview reviews={reviews} productId={productId} />
           </div>
         </div>
       </div>
