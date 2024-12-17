@@ -7,7 +7,7 @@ const app = express();
 // CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://e-commerce-sik5-fe.vercel.app"],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     allowedHeaders: [
       "Content-type",
