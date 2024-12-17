@@ -1,9 +1,10 @@
 import { getToken } from "@/helper/get-token";
 import axios from "axios";
 const token = getToken();
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const getAllBrands = () => {
-  return axios.get("http://localhost:5000/api/brand/all-brand", {
+  return axios.get(`${serverUrl}/brand/all-brand`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -13,7 +14,7 @@ export const getAllBrands = () => {
 
 export const getBrandsPaginate = (page, limit) => {
   return axios.get(
-    `http://localhost:5000/api/brand/pagination?page=${page}&limit=${limit}`,
+    `${serverUrl}/brand/pagination?page=${page}&limit=${limit}`,
     {
       withCredentials: true,
       headers: {
@@ -25,7 +26,7 @@ export const getBrandsPaginate = (page, limit) => {
 
 export const postAddNewBrands = (name, description) => {
   return axios.post(
-    "http://localhost:5000/api/brand/add-brand",
+    `${serverUrl}/brand/add-brand`,
     {
       name: name,
       description: description,
@@ -40,7 +41,7 @@ export const postAddNewBrands = (name, description) => {
 };
 
 export const deleteAdminBrand = (id) => {
-  return axios.delete(`http://localhost:5000/api/brand/delete/${id}`, {
+  return axios.delete(`${serverUrl}/brand/delete/${id}`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -50,7 +51,7 @@ export const deleteAdminBrand = (id) => {
 
 export const editAdminBrand = (id, { name, description }) => {
   return axios.patch(
-    `http://localhost:5000/api/brand/edit/${id}`,
+    `${serverUrl}/brand/edit/${id}`,
     {
       name: name,
       description: description,

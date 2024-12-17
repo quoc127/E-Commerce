@@ -1,8 +1,9 @@
 import axios from "axios";
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const postAuthRegister = (userName, email, password) => {
   return axios.post(
-    "http://localhost:5000/api/user/register",
+    `${serverUrl}/user/register`,
     {
       userName: userName,
       email: email,
@@ -16,7 +17,7 @@ export const postAuthRegister = (userName, email, password) => {
 
 export const postAuthLogin = (email, password) => {
   return axios.post(
-    "http://localhost:5000/api/user/login",
+    `${serverUrl}/user/login`,
     {
       email: email,
       password: password,
@@ -29,14 +30,14 @@ export const postAuthLogin = (email, password) => {
 
 export const postAuthLogout = () => {
   return axios.post(
-    "http://localhost:5000/api/user/logout",
+    `${serverUrl}/user/logout`,
     {},
     { withCredentials: true }
   );
 };
 
 export const getCheckAuth = () => {
-  return axios.get("http://localhost:5000/api/user/check-auth", {
+  return axios.get(`${serverUrl}/user/check-auth`, {
     withCredentials: true,
     headers: {
       "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -46,7 +47,7 @@ export const getCheckAuth = () => {
 
 export const patchChangePassword = (email, password) => {
   return axios.patch(
-    "http://localhost:5000/api/user/change-password",
+    `${serverUrl}/user/change-password`,
     {
       email: email,
       password: password,
@@ -59,7 +60,7 @@ export const patchChangePassword = (email, password) => {
 
 export const postForgotPassword = (email) => {
   return axios.post(
-    "http://localhost:5000/api/user/forgot-password",
+    `${serverUrl}/user/forgot-password`,
     {
       email: email,
     },
@@ -71,7 +72,7 @@ export const postForgotPassword = (email) => {
 
 export const patchResetPassword = (otp, password) => {
   return axios.patch(
-    "http://localhost:5000/api/user/reset-password",
+    `${serverUrl}/user/reset-password`,
     {
       otp: otp,
       password: password,

@@ -1,9 +1,10 @@
 import { getToken } from "@/helper/get-token";
 import axios from "axios";
 const token = getToken();
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const getAllProducts = () => {
-  return axios.get("http://localhost:5000/api/product/all-product", {
+  return axios.get(`${serverUrl}/product/all-product`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -13,7 +14,7 @@ export const getAllProducts = () => {
 
 export const getProductsPaginate = (page, limit) => {
   return axios.get(
-    `http://localhost:5000/api/product/pagination?page=${page}&limit=${limit}`,
+    `${serverUrl}/product/pagination?page=${page}&limit=${limit}`,
     {
       withCredentials: true,
       headers: {
@@ -44,7 +45,7 @@ export const postAddNewProduct = ({
     formData.append("image", productImage);
   }
 
-  return axios.post("http://localhost:5000/api/product/add-product", formData, {
+  return axios.post(`${serverUrl}/product/add-product`, formData, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -53,7 +54,7 @@ export const postAddNewProduct = ({
 };
 
 export const deleteProduct = (id) => {
-  return axios.delete(`http://localhost:5000/api/product/delete/${id}`, {
+  return axios.delete(`${serverUrl}/product/delete/${id}`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -84,7 +85,7 @@ export const editProduct = (
   if (productImage) {
     formData.append("image", productImage);
   }
-  return axios.patch(`http://localhost:5000/api/product/edit/${id}`, formData, {
+  return axios.patch(`${serverUrl}/product/edit/${id}`, formData, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,

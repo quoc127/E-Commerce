@@ -1,10 +1,11 @@
 import { getToken } from "@/helper/get-token";
 import axios from "axios";
 const token = getToken();
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const postCartItem = (userId, productId, quantity) => {
   return axios.post(
-    "http://localhost:5000/api/shop/cart/add",
+    `${serverUrl}/shop/cart/add`,
     {
       userId: userId,
       productId: productId,
@@ -20,7 +21,7 @@ export const postCartItem = (userId, productId, quantity) => {
 };
 
 export const getCartItem = (userId) => {
-  return axios.get(`http://localhost:5000/api/shop/cart/get/${userId}`, {
+  return axios.get(`${serverUrl}/shop/cart/get/${userId}`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -30,7 +31,7 @@ export const getCartItem = (userId) => {
 
 export const patchCartItem = (userId, productId, quantity) => {
   return axios.patch(
-    "http://localhost:5000/api/shop/cart/update",
+    `${serverUrl}/shop/cart/update`,
     {
       userId: userId,
       productId: productId,
@@ -47,7 +48,7 @@ export const patchCartItem = (userId, productId, quantity) => {
 
 export const deleteCartItem = (userId, productId) => {
   return axios.delete(
-    `http://localhost:5000/api/shop/cart/delete/${userId}/${productId}`,
+    `${serverUrl}/shop/cart/delete/${userId}/${productId}`,
     {
       withCredentials: true,
       headers: {

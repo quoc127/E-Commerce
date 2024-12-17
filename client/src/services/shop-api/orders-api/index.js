@@ -1,9 +1,10 @@
 import { getToken } from "@/helper/get-token";
 import axios from "axios";
 const token = getToken();
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const postCreateOrder = (orderData) => {
-  return axios.post("http://localhost:5000/api/shop/order/create", orderData, {
+  return axios.post(`${serverUrl}/shop/order/create`, orderData, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -13,7 +14,7 @@ export const postCreateOrder = (orderData) => {
 
 export const postCaptureOrder = (orderId, paymentId, payerId) => {
   return axios.post(
-    "http://localhost:5000/api/shop/order/capture",
+    `${serverUrl}/shop/order/capture`,
     {
       orderId: orderId,
       paymentId: paymentId,
@@ -29,7 +30,7 @@ export const postCaptureOrder = (orderId, paymentId, payerId) => {
 };
 
 export const getAllOrderByUser = (userId) => {
-  return axios.get(`http://localhost:5000/api/shop/order/list/${userId}`, {
+  return axios.get(`${serverUrl}/shop/order/list/${userId}`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -38,7 +39,7 @@ export const getAllOrderByUser = (userId) => {
 };
 
 export const getDetailOrderByUser = (orderId) => {
-  return axios.get(`http://localhost:5000/api/shop/order/detail/${orderId}`, {
+  return axios.get(`${serverUrl}/shop/order/detail/${orderId}`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,

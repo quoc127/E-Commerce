@@ -4,8 +4,10 @@ import axios from "axios";
 
 const token = getToken();
 
+const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 export const getAllImage = () => {
-  return axios.get("http://localhost:5000/api/slide/all-image", {
+  return axios.get(`${serverUrl}/slide/all-image`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -22,7 +24,7 @@ export const postImage = ({ image, name, description }) => {
     formData.append("image", image);
   }
 
-  return axios.post("http://localhost:5000/api/slide/add-image", formData, {
+  return axios.post(`${serverUrl}/slide/add-image`, formData, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -31,7 +33,7 @@ export const postImage = ({ image, name, description }) => {
 };
 
 export const deleteImage = (id) => {
-  return axios.delete(`http://localhost:5000/api/slide/delete-image/${id}`, {
+  return axios.delete(`${serverUrl}/slide/delete-image/${id}`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -48,7 +50,7 @@ export const editImage = (id, { image, name, description }) => {
     formData.append("image", image);
   }
   return axios.patch(
-    `http://localhost:5000/api/slide/edit-image/${id}`,
+    `${serverUrl}/slide/edit-image/${id}`,
     formData,
     {
       withCredentials: true,
