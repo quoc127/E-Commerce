@@ -92,8 +92,16 @@ module.exports.login = async (req, res) => {
       }
     );
     res
-      .cookie("token", token)
-      .cookie("refreshToken", refreshToken)
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
       .status(200)
       .json({
         success: true,
@@ -256,7 +264,7 @@ module.exports.authMiddleware = async (req, res) => {
 module.exports.refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    
+
     if (!refreshToken) {
       return res.status(404).json({
         success: false,
