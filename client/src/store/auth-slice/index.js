@@ -27,12 +27,16 @@ export const loginUser = createAsyncThunk(
   "/user/login",
   async ({ email, password }) => {
     const response = await postAuthLogin(email, password);
+    if (response.data.success) {
+      localStorage.setItem('accessToken', response.data.token);
+    }
     return response.data;
   }
 );
 
 export const logoutUser = createAsyncThunk("/user/logout", async () => {
   const response = await postAuthLogout();
+  localStorage.removeItem('accessToken');
   return response.data;
 });
 
