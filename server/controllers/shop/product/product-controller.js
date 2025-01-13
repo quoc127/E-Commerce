@@ -58,7 +58,7 @@ module.exports.getShopNewProduct = async (req, res) => {
     const currentDate = new Date();
     const thirtyDaysAgo = new Date(currentDate);
 
-    thirtyDaysAgo.setDate(currentDate.getDate() - 60);
+    thirtyDaysAgo.setDate(currentDate.getDate() - 365);
 
     const newProducts = await Product.find({
       createdAt: { $gte: thirtyDaysAgo },
